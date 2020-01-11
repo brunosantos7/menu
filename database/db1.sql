@@ -81,18 +81,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `menudb`.`user_profile`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `menudb`.`user_profile` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `address` VARCHAR(100) NULL DEFAULT NULL,
-  `phone` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `menudb`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`user` (
@@ -100,14 +88,9 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user` (
   `username` VARCHAR(100) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   `user_type` INT(11) NOT NULL,
-  `user_profile_id` INT(11) NULL DEFAULT NULL,
   `restaurant_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_user_user_profile_idx` (`user_profile_id` ASC) VISIBLE,
   INDEX `fk_user_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
-  CONSTRAINT `fk_user_user_profile`
-    FOREIGN KEY (`user_profile_id`)
-    REFERENCES `menudb`.`user_profile` (`id`),
   CONSTRAINT `fk_user_restaurant1`
     FOREIGN KEY (`restaurant_id`)
     REFERENCES `menudb`.`restaurant` (`id`)
@@ -115,6 +98,25 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `menudb`.`user_profile`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `menudb`.`user_profile` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `address` VARCHAR(100) NULL DEFAULT NULL,
+  `phone` VARCHAR(45) NULL DEFAULT NULL,
+  `user_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_profile_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_profile_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `menudb`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
