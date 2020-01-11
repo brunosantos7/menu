@@ -44,6 +44,7 @@
 		00E356EE1AD99517003FC87E /* menumobileappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = menumobileappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* menumobileappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = menumobileappTests.m; sourceTree = "<group>"; };
+		026AD99BDB2F21ED28BA9F6F /* Pods-menumobileappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileappTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileappTests/Pods-menumobileappTests.release.xcconfig"; sourceTree = "<group>"; };
 		046743FC78E29FF87F1B3D0C /* Pods-menumobileappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileappTests.release.xcconfig"; path = "Target Support Files/Pods-menumobileappTests/Pods-menumobileappTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* menumobileapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = menumobileapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = menumobileapp/AppDelegate.h; sourceTree = "<group>"; };
@@ -52,19 +53,26 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = menumobileapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = menumobileapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = menumobileapp/main.m; sourceTree = "<group>"; };
+		1E8E28C8ACCE3D92C4841328 /* Pods-menumobileappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileappTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileappTests/Pods-menumobileappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* menumobileapp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "menumobileapp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* menumobileapp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "menumobileapp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE455276DA8CA2D10D39198 /* Pods-menumobileapp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-menumobileapp-tvOS/Pods-menumobileapp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		5F370BCB8C7485A09525A71C /* Pods-menumobileapp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileapp-tvOSTests/Pods-menumobileapp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6915C6EBE18C4904DCD11980 /* libPods-menumobileapp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-menumobileapp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B788C3E232A5C2B5040EC76 /* Pods-menumobileapp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-menumobileapp-tvOSTests/Pods-menumobileapp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		6FE9770E946ACFEE0CF87C76 /* libPods-menumobileapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-menumobileapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		742FB0261570AF54BA64CBC0 /* Pods-menumobileapp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-menumobileapp-tvOS/Pods-menumobileapp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		7716D0CD97FDFD91021A5E58 /* Pods-menumobileappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileappTests.debug.xcconfig"; path = "Target Support Files/Pods-menumobileappTests/Pods-menumobileappTests.debug.xcconfig"; sourceTree = "<group>"; };
+		974F3C5CE3FD1FAA8355DB1D /* Pods-menumobileapp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileapp-tvOSTests/Pods-menumobileapp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		99F31F8E598B0F430C1FC3A8 /* Pods-menumobileapp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-menumobileapp-tvOSTests/Pods-menumobileapp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ACD1535341C8F1901095F1ED /* Pods-menumobileapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp.release.xcconfig"; path = "Target Support Files/Pods-menumobileapp/Pods-menumobileapp.release.xcconfig"; sourceTree = "<group>"; };
+		B2644CB6CDD694D3BD300BE2 /* Pods-menumobileapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileapp/Pods-menumobileapp.release.xcconfig"; sourceTree = "<group>"; };
+		B527B5E98413D09932FA1F82 /* Pods-menumobileapp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileapp-tvOS/Pods-menumobileapp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		C8A4573F12485E70249F4C1D /* libPods-menumobileapp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-menumobileapp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E800AE35DEB1C686935FED90 /* Pods-menumobileapp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileapp-tvOS/Pods-menumobileapp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F58FC975D9D807AF22959C36 /* Pods-menumobileapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-menumobileapp/Pods-menumobileapp.debug.xcconfig"; sourceTree = "<group>"; };
 		F78E0AA309DC622FF1D4F4CC /* libPods-menumobileappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-menumobileappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0E7F36288C57C2104D5A89 /* Pods-menumobileapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-menumobileapp.debug.xcconfig"; path = "Target Support Files/Pods-menumobileapp/Pods-menumobileapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,6 +201,14 @@
 				6B788C3E232A5C2B5040EC76 /* Pods-menumobileapp-tvOSTests.release.xcconfig */,
 				7716D0CD97FDFD91021A5E58 /* Pods-menumobileappTests.debug.xcconfig */,
 				046743FC78E29FF87F1B3D0C /* Pods-menumobileappTests.release.xcconfig */,
+				F58FC975D9D807AF22959C36 /* Pods-menumobileapp.debug.xcconfig */,
+				B2644CB6CDD694D3BD300BE2 /* Pods-menumobileapp.release.xcconfig */,
+				B527B5E98413D09932FA1F82 /* Pods-menumobileapp-tvOS.debug.xcconfig */,
+				E800AE35DEB1C686935FED90 /* Pods-menumobileapp-tvOS.release.xcconfig */,
+				5F370BCB8C7485A09525A71C /* Pods-menumobileapp-tvOSTests.debug.xcconfig */,
+				974F3C5CE3FD1FAA8355DB1D /* Pods-menumobileapp-tvOSTests.release.xcconfig */,
+				1E8E28C8ACCE3D92C4841328 /* Pods-menumobileappTests.debug.xcconfig */,
+				026AD99BDB2F21ED28BA9F6F /* Pods-menumobileappTests.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
