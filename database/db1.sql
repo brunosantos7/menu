@@ -85,7 +85,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(100) NOT NULL,
+  `user_name` VARCHAR(100) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   `user_type` INT(11) NOT NULL,
   `restaurant_id` INT NOT NULL,
