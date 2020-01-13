@@ -44,7 +44,7 @@ public class RestaurantController {
 		return menuRepository.findByRestaurantId(id);
 	}
 	
-	@PostMapping("/save")
+	@PostMapping
 	public @ResponseBody Restaurant save(@RequestBody RestaurantDTO newRestaurantDTO) {
 		return restaurantRepository.save(newRestaurantDTO.toRestaurantEntity());
 		

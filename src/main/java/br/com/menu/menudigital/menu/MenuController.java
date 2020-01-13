@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -24,22 +23,12 @@ public class MenuController {
 		this.menuRepository = menuRepository;
 	}
 	
-//	@GetMapping
-//	public @ResponseBody Iterable<Menu> getAllMenus() {
-//		return menuRepository.findAll();
-//	}
-	
 	@GetMapping("/{id}")
 	public @ResponseBody Optional<Menu> getMenuById(@PathVariable Long id) throws Exception {
 		return menuRepository.findById(id);
 	}
 	
-//	@GetMapping
-//	public @ResponseBody Menu getMenuByRestaurantId(@RequestParam Long restaurantId) {
-//		return menuRepository.findByRestaurantId(restaurantId);
-//	}
-	
-	@PostMapping("/save")
+	@PostMapping
 	public @ResponseBody Menu saveMenu(@RequestBody MenuDTO newMenuDTO) {
 		return menuRepository.save(newMenuDTO.toMenuEntity());
 	}

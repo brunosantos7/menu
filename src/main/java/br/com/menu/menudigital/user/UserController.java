@@ -22,7 +22,7 @@ public class UserController {
 		return userRepository.findAll();
 	}
 	
-	@PostMapping("/save")
+	@PostMapping
 	public @ResponseBody String saveUser() {
 		User user = new User();
 		user.setPassword("123");
