@@ -12,6 +12,7 @@ public class Restaurant {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String imagePath;
 	
 	public Long getId() {
 		return id;
@@ -25,5 +26,10 @@ public class Restaurant {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 }
