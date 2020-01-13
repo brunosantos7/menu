@@ -22,7 +22,7 @@ USE `menudb` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`restaurant` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL,
   `image_path` VARCHAR(255) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -33,7 +33,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`menu` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(100) NULL DEFAULT NULL,
+  `title` VARCHAR(100) NULL,
   `restaurant_id` INT NOT NULL,
   `image_path` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
