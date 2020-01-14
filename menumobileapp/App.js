@@ -1,16 +1,15 @@
 import React from 'react';
 import 'react-native-gesture-handler';
-
-import { StyleSheet, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
+import AppRoutes from './src/AppRoutes';
 
 const App = () => {
     return (
         <>
             <StatusBar barStyle="dark-content" />
+            <AppRoutes />
         </>
     );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;
