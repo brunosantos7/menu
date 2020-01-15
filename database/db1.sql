@@ -21,11 +21,13 @@ USE `menudb` ;
 -- Table `menudb`.`restaurant`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`restaurant` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `image_path` VARCHAR(255) NULL,
+  `image_path` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+AUTO_INCREMENT = 40
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -33,18 +35,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`menu` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(100) NULL,
-  `restaurant_id` INT NOT NULL,
-  `image_path` VARCHAR(255) NULL,
+  `title` VARCHAR(100) NULL DEFAULT NULL,
+  `restaurant_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_menu_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
   CONSTRAINT `fk_menu_restaurant1`
     FOREIGN KEY (`restaurant_id`)
-    REFERENCES `menudb`.`restaurant` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `menudb`.`restaurant` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -62,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `menudb`.`category` (
     FOREIGN KEY (`menu_id`)
     REFERENCES `menudb`.`menu` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 10
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -83,6 +83,23 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `menudb`.`restaurant_profile`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `menudb`.`restaurant_profile` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `address` VARCHAR(100) NOT NULL,
+  `phone` VARCHAR(45) NULL DEFAULT NULL,
+  `restaurant_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_restaurante_profile_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
+  CONSTRAINT `fk_restaurante_profile_restaurant1`
+    FOREIGN KEY (`restaurant_id`)
+    REFERENCES `menudb`.`restaurant` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `menudb`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`user` (
@@ -90,14 +107,12 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user` (
   `username` VARCHAR(100) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   `user_type` INT(11) NOT NULL,
-  `restaurant_id` INT NOT NULL,
+  `restaurant_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_user_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
   CONSTRAINT `fk_user_restaurant1`
     FOREIGN KEY (`restaurant_id`)
-    REFERENCES `menudb`.`restaurant` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `menudb`.`restaurant` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
@@ -115,29 +130,9 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user_profile` (
   INDEX `fk_user_profile_user1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_user_profile_user1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `menudb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `menudb`.`user` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `menudb`.`restaurante_profile`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `menudb`.`restaurante_profile` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `address` VARCHAR(100) NOT NULL,
-  `phone` VARCHAR(45) NULL,
-  `restaurant_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_restaurante_profile_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
-  CONSTRAINT `fk_restaurante_profile_restaurant1`
-    FOREIGN KEY (`restaurant_id`)
-    REFERENCES `menudb`.`restaurant` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
