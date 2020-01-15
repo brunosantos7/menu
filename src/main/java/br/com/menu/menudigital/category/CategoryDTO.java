@@ -1,26 +1,11 @@
 package br.com.menu.menudigital.category;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Category {
+public class CategoryDTO {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	private String name;
 	private String imagePath;
 	private Long menuId;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -38,6 +23,14 @@ public class Category {
 	}
 	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
+	}
+	
+	public Category toEntity() {
+		Category category = new Category();
+		category.setName(this.getName());	
+		category.setImagePath(this.getImagePath());
+		category.setMenuId(this.getMenuId());
+		return category;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package br.com.menu.menudigital.menu;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -12,20 +13,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.menu.menudigital.category.Category;
+import br.com.menu.menudigital.category.CategoryRepository;
+
 @Controller
 @RequestMapping("/menu")
 public class MenuController {
 
 	private MenuRepository menuRepository;
 
-	public MenuController(MenuRepository menuRepository) {
+	private CategoryRepository categoryRepository;
+
+	public MenuController(MenuRepository menuRepository, CategoryRepository categoryRepository) {
 		super();
 		this.menuRepository = menuRepository;
+		this.categoryRepository = categoryRepository;
 	}
-	
+
 	@GetMapping("/{id}")
 	public @ResponseBody Optional<Menu> getMenuById(@PathVariable Long id) throws Exception {
 		return menuRepository.findById(id);
+	}
+	
+	@GetMapping("/{id}/categories")
+	public @ResponseBody List<Category> getMenuCategoriesById(@PathVariable Long id) throws Exception {
+		return categoryRepository.findByMenuId(id);
 	}
 	
 	@PostMapping

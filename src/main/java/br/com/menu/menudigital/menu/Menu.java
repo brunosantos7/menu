@@ -15,7 +15,6 @@ public class Menu {
 	private Long id;
 	private String title;
 	private Long restaurantId;
-	private String imagePath;
 	
 	public Long getId() {
 		return id;
@@ -34,12 +33,6 @@ public class Menu {
 	}
 	public void setRestaurantId(Long restaurantId) {
 		this.restaurantId = restaurantId;
-	}
-	public String getImagePath() {
-		return imagePath;
-	}
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
 	}
 	
 }
