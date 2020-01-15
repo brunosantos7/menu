@@ -1,14 +1,15 @@
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import MnText from '../components/MnText';
 
 const ProductDetail = () => {
     return (
         <ScrollView style={styles.container}>
             <View style={[styles.card, styles.header]}>
-                <Text>Product Name</Text>
+                <MnText>Product Name</MnText>
             </View>
             <View style={styles.card}>
-                <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu libero consequat, ullamcorper metus eget, vulputate lacus. Integer auctor vestibulum mi, ut laoreet tellus interdum sed. Nulla cursus dolor in tellus vestibulum, vel sollicitudin tellus auctor. Mauris in lobortis odio. Nunc eget consequat diam. Duis a elit at dui finibus semper. Vivamus et dui pretium, rhoncus ipsum vitae, imperdiet elit. Mauris eget blandit neque, placerat commodo justo. Praesent cursus elementum turpis sit amet ultricies. Donec et justo sit amet metus faucibus volutpat. Cras a gravida urna, vitae euismod diam. Phasellus efficitur nisl eu enim lacinia bibendum.</Text>
+                <MnText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu libero consequat, ullamcorper metus eget, vulputate lacus. Integer auctor vestibulum mi, ut laoreet tellus interdum sed. Nulla cursus dolor in tellus vestibulum, vel sollicitudin tellus auctor. Mauris in lobortis odio. Nunc eget consequat diam. Duis a elit at dui finibus semper. Vivamus et dui pretium, rhoncus ipsum vitae, imperdiet elit. Mauris eget blandit neque, placerat commodo justo. Praesent cursus elementum turpis sit amet ultricies. Donec et justo sit amet metus faucibus volutpat. Cras a gravida urna, vitae euismod diam. Phasellus efficitur nisl eu enim lacinia bibendum.</MnText>
             </View>
         </ScrollView>
     )

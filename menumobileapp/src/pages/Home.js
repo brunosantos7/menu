@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, FlatList, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import MnText from '../components/MnText';
 
 const RestaurantTile = ({ item, onPressItem }) => {
     return (
         <TouchableOpacity style={styles.tile} onPress={onPressItem}>
-            <Text style={styles.tileTitle}>{item.name}</Text>
+            <MnText style={styles.tileTitle}>{item.name}</MnText>
         </TouchableOpacity>
     );
 };
