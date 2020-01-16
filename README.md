@@ -14,7 +14,7 @@ A API Basic Error Controller foi criada pelo swagger e alguns models nao sao ent
 # Running JAR file
 
 Sempre que houver um commit, irei gerar um jar e colocar na pasta "gitHubFiles". Para executar o jar sera necessario ter o Java 8 instalado (jre) e abrir o terminal na pasta em que esta o jar e executar o seguinte comando:
-java -jar -nome do arquivo-.jar
+`java -jar nome do arquivo.jar`
   
 <img src="gitHubFiles/executeJar.png" />
 
