@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.menu.menudigital.product.Product;
+import br.com.menu.menudigital.product.ProductRepository;
+
 
 @Controller
 @RequestMapping("/category")
@@ -24,9 +29,17 @@ public class CategoryController {
 	
 	private CategoryRepository categoryRepository;
 	
-	public CategoryController(CategoryRepository categoryRepository) {
+	private ProductRepository productRepository;
+	
+	public CategoryController(CategoryRepository categoryRepository, ProductRepository productRepository) {
 		super();
 		this.categoryRepository = categoryRepository;
+		this.productRepository = productRepository;
+	}
+	
+	@GetMapping("/{id}")
+	public @ResponseBody List<Product> getProductsByCategory(@PathVariable Long id){
+		return this.productRepository.findByCategoryId(id);
 	}
 
 	@PostMapping

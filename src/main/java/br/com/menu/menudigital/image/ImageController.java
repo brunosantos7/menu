@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.menu.menudigital.category.Category;
 import br.com.menu.menudigital.category.CategoryRepository;
+import br.com.menu.menudigital.product.Product;
+import br.com.menu.menudigital.product.ProductRepository;
 import br.com.menu.menudigital.restaurant.Restaurant;
 import br.com.menu.menudigital.restaurant.RestaurantRepository;
 
@@ -24,11 +26,15 @@ public class ImageController {
 	private CategoryRepository categoryRepository;
 
 	private RestaurantRepository restaurantRepository;
+
+	private ProductRepository productRepository;
 	
-	public ImageController(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository) {
+	public ImageController(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository,
+			ProductRepository productRepository) {
 		super();
 		this.categoryRepository = categoryRepository;
 		this.restaurantRepository = restaurantRepository;
+		this.productRepository = productRepository;
 	}
 
 	@GetMapping("/category/{id}")
@@ -48,9 +54,15 @@ public class ImageController {
 	    response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 	    IOUtils.copy(new FileInputStream(fileSystemResource.getFile()), response.getOutputStream());
 	}
-
-
-
 	
+	@GetMapping("/product/{id}")
+	public void getProductImage(@PathVariable Long id, HttpServletResponse response) throws Exception {
+		Product product = productRepository.findById(id).orElseThrow(() -> new Exception("test"));
+		
+		FileSystemResource fileSystemResource = new FileSystemResource(product.getImagePath());
+	    response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+	    IOUtils.copy(new FileInputStream(fileSystemResource.getFile()), response.getOutputStream());
+	}
+
 
 }
