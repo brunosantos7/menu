@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 @Entity
 public class Category {
 	
@@ -39,5 +41,12 @@ public class Category {
 	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
 	}
+	
+	public String getImageUri() {
+		return ServletUriComponentsBuilder.fromCurrentContextPath()
+			    .path(String.format("images/category/%s", this.id))
+			    .toUriString();
+	}
+	
 	
 }

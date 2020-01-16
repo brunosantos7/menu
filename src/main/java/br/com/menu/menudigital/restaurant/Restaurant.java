@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 @Entity
 public class Restaurant {
 
@@ -31,5 +33,11 @@ public class Restaurant {
 	}
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+	
+	public String getUri() {
+		return ServletUriComponentsBuilder.fromCurrentContextPath()
+			    .path(String.format("images/restaurant/%s", this.id))
+			    .toUriString();
 	}
 }
