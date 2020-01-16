@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, FlatList, StyleSheet, Image, View } from 'react-native';
-import MnText from '../components/MnText';
-import { colors } from '../constants';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FlatList, StyleSheet } from 'react-native';
+import RestaurantTile from '../components/RestaurantTile';
 import image1 from '../../assets/images/image1.jpg';
 import image2 from '../../assets/images/image2.jpg';
 import image3 from '../../assets/images/image3.jpg';
@@ -14,19 +11,6 @@ import image7 from '../../assets/images/image7.jpg';
 import image8 from '../../assets/images/image8.jpg';
 import image9 from '../../assets/images/image9.jpg';
 import image10 from '../../assets/images/image10.jpg';
-
-const RestaurantTile = ({ item, onPressItem }) => {
-    return (
-        <TouchableOpacity style={styles.tile} onPress={onPressItem}>
-            <Image style={styles.image} source={item.image} />
-            <View style={styles.detailsView}>
-                <MnText style={styles.title}>{item.name}</MnText>
-                <MnText style={styles.subtitle}>{item.category}</MnText>
-            </View>
-            <FontAwesomeIcon icon={faChevronRight} size={20} color={colors.orange} />
-        </TouchableOpacity>
-    );
-};
 
 const Home = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
@@ -124,40 +108,6 @@ const styles = StyleSheet.create({
     container: {
         paddingVertical: 10,
     },
-    tile: {
-        marginHorizontal: 15,
-        marginVertical: 7,
-        backgroundColor: '#FFFFFF',
-        paddingVertical: 15,
-        paddingHorizontal: 10,
-        borderRadius: 3,
-        shadowColor: '#CCCCCC',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-    detailsView: {
-        flex: 1,
-        marginLeft: 15,
-    },
-    title: {
-        fontSize: 16,
-    },
-    subtitle: {
-        fontSize: 12,
-        color: colors.orange,
-    },
-    image: {
-        height: 50,
-        width: 50,
-        resizeMode: 'cover',
-        borderRadius: 50,
-        borderWidth: 2,
-        borderColor: colors.orange,
-    }
 });
 
 export default Home;
