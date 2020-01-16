@@ -1,6 +1,7 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import LoadingPage from './pages/LoadingPage';
 import Home from './pages/Home';
 import CategoryList from './pages/CategoryList';
 import ProductList from './pages/ProductList';
@@ -22,6 +23,22 @@ const defaultNavigationOptions = {
     headerStyle: headerStyle,
     headerTitleStyle: headerTitleStyle,
 };
+
+const AuthLoadingNavigator = createStackNavigator(
+    {
+        LoadingPage: {
+            screen: LoadingPage,
+            navigationOptions: (navigation) => ({
+                header: () => <></>
+            }),
+        }
+    },
+    {
+        initialRouteName: 'LoadingPage',
+        defaultNavigationOptions: defaultNavigationOptions,
+        headerTitleAlign: 'center',
+    },
+);
 
 const AppNavigator = createStackNavigator(
     {
@@ -60,6 +77,16 @@ const AppNavigator = createStackNavigator(
     },
 );
 
-const AppRoutes = createAppContainer(AppNavigator);
+const AppRoutes = createAppContainer(
+    createSwitchNavigator(
+        {
+            AuthLoading: AuthLoadingNavigator,
+            App: AppNavigator,
+        },
+        {
+          initialRouteName: 'AuthLoading',
+        }
+      )
+);
 
 export default AppRoutes;
