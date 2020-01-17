@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.orange,
+        backgroundColor: colors.primary,
     },
     loadingText: {
         fontSize: 21,

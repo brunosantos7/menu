@@ -8,12 +8,12 @@ import { colors } from '../constants';
 const RestaurantTile = ({ item, onPressItem }) => {
     return (
         <TouchableOpacity style={styles.tile} onPress={onPressItem}>
-            <Image style={styles.image} source={item.image} />
+            {item.image && <Image style={styles.image} source={item.image} />}
             <View style={styles.detailsView}>
                 <MnText style={styles.title}>{item.name}</MnText>
                 <MnText style={styles.subtitle}>{item.category}</MnText>
             </View>
-            <FontAwesomeIcon icon={faChevronRight} size={20} color={colors.orange} />
+            <FontAwesomeIcon icon={faChevronRight} size={20} color={colors.primary} />
         </TouchableOpacity>
     );
 };
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 12,
-        color: colors.orange,
+        color: colors.primary,
     },
     image: {
         height: 50,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         borderRadius: 50,
         borderWidth: 2,
-        borderColor: colors.orange,
+        borderColor: colors.primary,
     }
 });
 

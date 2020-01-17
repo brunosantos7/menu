@@ -10,7 +10,7 @@ import MnBackButton from './components/MnBackButton';
 import { colors } from './constants';
 
 const headerStyle = {
-    backgroundColor: colors.orange,
+    backgroundColor: colors.primary,
 };
 
 const headerTitleStyle = {
@@ -45,7 +45,8 @@ const AppNavigator = createStackNavigator(
         Home: {
             screen: Home,
             navigationOptions: (navigation) => ({
-                title: navigation.navigation.getParam('title', 'Menu'),
+                // title: navigation.navigation.getParam('title', 'Menu'),
+                header: () => <></>,
             }),
         },
         CategoryList: {

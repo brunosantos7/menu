@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import RestaurantTile from '../components/RestaurantTile';
+import MnText from '../components/MnText';
 import image1 from '../../assets/images/image1.jpg';
 import image2 from '../../assets/images/image2.jpg';
 import image3 from '../../assets/images/image3.jpg';
@@ -11,6 +12,8 @@ import image7 from '../../assets/images/image7.jpg';
 import image8 from '../../assets/images/image8.jpg';
 import image9 from '../../assets/images/image9.jpg';
 import image10 from '../../assets/images/image10.jpg';
+import { colors } from '../constants';
+import InputSearch from '../components/InputSearch';
 
 const Home = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
@@ -88,26 +91,70 @@ const Home = ({ navigation }) => {
     }
 
     return (
-        <FlatList
-            contentContainerStyle={styles.container}
-            data={restaurants}
-            renderItem={({ item }) => (
-                <RestaurantTile
-                    item={item}
-                    onPressItem={() => {
-                        onPressRestaurant(item);
-                    }}
-                />
-            )}
-            keyExtractor={item => item.id.toString()}
-        />
+        <SafeAreaView style={styles.container}>
+            <FlatList
+                // contentContainerStyle={styles.container}
+                data={restaurants}
+                renderItem={({ item }) => (
+                    <RestaurantTile
+                        item={item}
+                        onPressItem={() => {
+                            onPressRestaurant(item);
+                        }}
+                    />
+                )}
+                keyExtractor={item => item.id.toString()}
+                ListHeaderComponent={() => (
+                    <View style={styles.header}>
+                        <MnText style={styles.headerTitle}>Busca</MnText>
+                        <View style={styles.headerSearch}>
+                            <InputSearch placeholder="Busque por restaurante ou menu" />
+                        </View>
+
+                        <MnText style={styles.headerTitle}>Restaurantes</MnText>
+                        <View style={styles.headerCity}>
+                            <MnText style={styles.headerSubTitle}>em Araguari/MG</MnText>
+                            <TouchableOpacity>
+                                <MnText style={styles.headerButton}>(Trocar cidade)</MnText>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+            />
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 10,
+        backgroundColor: colors.lightGray
     },
+    header: {
+        marginHorizontal: 15,
+        marginVertical: 15,
+    },
+    headerTitle: {
+        fontSize: 18,
+    },
+    headerSubTitle: {
+        fontSize: 12,
+        color: colors.primary,
+    },
+    headerCity: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    headerSearch: {
+        marginTop: 10,
+        marginBottom: 15,
+        flex: 1,
+    },
+    headerButton: {
+        fontSize: 12,
+        color: colors.blue
+    }
 });
 
 export default Home;
