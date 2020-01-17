@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import {
+    FlatList,
+    StyleSheet,
+    SafeAreaView,
+    View,
+    TouchableOpacity,
+} from 'react-native';
 import RestaurantTile from '../components/RestaurantTile';
 import MnText from '../components/MnText';
-import image1 from '../../assets/images/image1.jpg';
-import image2 from '../../assets/images/image2.jpg';
-import image3 from '../../assets/images/image3.jpg';
-import image4 from '../../assets/images/image4.jpg';
-import image5 from '../../assets/images/image5.jpg';
-import image6 from '../../assets/images/image6.jpg';
-import image7 from '../../assets/images/image7.jpg';
-import image8 from '../../assets/images/image8.jpg';
-import image9 from '../../assets/images/image9.jpg';
-import image10 from '../../assets/images/image10.jpg';
+import RestaurantService from '../services/RestaurantService';
 import { colors } from '../constants';
 import InputSearch from '../components/InputSearch';
 
@@ -19,69 +16,12 @@ const Home = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
 
     useEffect(() => {
-        const items = [
-            {
-                id: 1,
-                name: 'Deró Lanches',
-                category: 'Lanchonete',
-                image: image1,
-            },
-            {
-                id: 2,
-                name: 'Sal e Brasa',
-                category: 'Bar e Restaurante',
-                image: image2,
-            },
-            {
-                id: 3,
-                name: 'Bikão Lanches III',
-                category: 'Lanchonete',
-                image: image3,
-            },
-            {
-                id: 4,
-                name: 'Cabrito',
-                category: 'Restaurante',
-                image: image4,
-            },
-            {
-                id: 5,
-                name: 'Caipirão',
-                category: 'Restaurante',
-                image: image5,
-            },
-            {
-                id: 6,
-                name: 'Carreiro',
-                category: 'Bar e Restaurante',
-                image: image6,
-            },
-            {
-                id: 7,
-                name: 'Calabria',
-                category: 'Pizzaria e Restaurante',
-                image: image7,
-            },
-            {
-                id: 8,
-                name: 'Panela de Ferro',
-                category: 'Restaurante',
-                image: image8,
-            },
-            {
-                id: 9,
-                name: 'Avenida Beers',
-                category: 'Bar e Restaurante',
-                image: image9,
-            },
-            {
-                id: 10,
-                name: 'Açai.com',
-                category: 'Lanchonete e Açai',
-                image: image10,
-            }
-        ];
-        setRestaurants(items);
+        async function init() {
+            const items = await RestaurantService.getRestaurants();
+            setRestaurants(items);
+        }
+
+        init();
     }, []);
 
     function onPressRestaurant(restaurant) {
@@ -93,7 +33,6 @@ const Home = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
-                // contentContainerStyle={styles.container}
                 data={restaurants}
                 renderItem={({ item }) => (
                     <RestaurantTile
@@ -108,14 +47,18 @@ const Home = ({ navigation }) => {
                     <View style={styles.header}>
                         <MnText style={styles.headerTitle}>Busca</MnText>
                         <View style={styles.headerSearch}>
-                            <InputSearch placeholder="Busque por restaurante ou menu" />
+                            <InputSearch placeholder="Busque por item ou restaurante" />
                         </View>
 
                         <MnText style={styles.headerTitle}>Restaurantes</MnText>
                         <View style={styles.headerCity}>
-                            <MnText style={styles.headerSubTitle}>em Araguari/MG</MnText>
+                            <MnText style={styles.headerSubTitle}>
+                                em Araguari/MG
+                            </MnText>
                             <TouchableOpacity>
-                                <MnText style={styles.headerButton}>(Trocar cidade)</MnText>
+                                <MnText style={styles.headerButton}>
+                                    (Trocar cidade)
+                                </MnText>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -128,14 +71,14 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 10,
-        backgroundColor: colors.lightGray
+        backgroundColor: colors.background,
     },
     header: {
         marginHorizontal: 15,
         marginVertical: 15,
     },
     headerTitle: {
-        fontSize: 18,
+        fontSize: 24,
     },
     headerSubTitle: {
         fontSize: 12,
@@ -153,8 +96,8 @@ const styles = StyleSheet.create({
     },
     headerButton: {
         fontSize: 12,
-        color: colors.blue
-    }
+        color: colors.blue,
+    },
 });
 
 export default Home;

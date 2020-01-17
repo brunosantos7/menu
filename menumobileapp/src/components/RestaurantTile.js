@@ -13,7 +13,11 @@ const RestaurantTile = ({ item, onPressItem }) => {
                 <MnText style={styles.title}>{item.name}</MnText>
                 <MnText style={styles.subtitle}>{item.category}</MnText>
             </View>
-            <FontAwesomeIcon icon={faChevronRight} size={20} color={colors.primary} />
+            <FontAwesomeIcon
+                icon={faChevronRight}
+                size={20}
+                color={colors.primary}
+            />
         </TouchableOpacity>
     );
 };
@@ -27,9 +31,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 3,
         shadowColor: '#CCCCCC',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
         shadowRadius: 1,
+        borderWidth: 1,
+        borderColor: colors.lightGray,
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         borderWidth: 2,
         borderColor: colors.primary,
-    }
+    },
 });
 
 export default RestaurantTile;

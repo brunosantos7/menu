@@ -13,7 +13,12 @@ const InputSearch = ({ value, placeholder, onChange }) => {
 
     return (
         <View style={styles.container}>
-            <FontAwesomeIcon icon={faSearch} size={18} color={colors.gray} style={styles.icon} />
+            <FontAwesomeIcon
+                icon={faSearch}
+                size={18}
+                color={colors.gray}
+                style={styles.icon}
+            />
             <TextInput
                 style={styles.input}
                 onChangeText={text => onChangeText(text)}
@@ -31,18 +36,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: colors.white,
-        borderWidth: 1,
-        borderColor: colors.gray,
         borderRadius: 5,
     },
     icon: {
         marginHorizontal: 10,
     },
     input: {
-        height: 40, 
+        height: 40,
         fontFamily: 'Muli',
         flex: 1,
-    }
+    },
 });
 
 export default InputSearch;
