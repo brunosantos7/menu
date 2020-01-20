@@ -13,7 +13,7 @@ const MnBackButton = ({ navigation, style }) => {
 
     return (
         <TouchableOpacity onPress={back} style={[styles.container, style]}>
-            <FontAwesomeIcon icon={faChevronLeft} size={20} color={colors.white} />
+            <FontAwesomeIcon icon={faChevronLeft} size={20} color={colors.primary} />
         </TouchableOpacity>
     );
 }

@@ -10,13 +10,13 @@ import MnBackButton from './components/MnBackButton';
 import { colors } from './constants';
 
 const headerStyle = {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.white,
 };
 
 const headerTitleStyle = {
-    fontSize: 21,
+    fontSize: 18,
     fontFamily: 'Muli',
-    color: colors.white,
+    color: colors.primary,
 };
 
 const defaultNavigationOptions = {

@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import RestaurantTile from '../components/RestaurantTile';
+import RestaurantCard from '../components/RestaurantCard';
 import MnText from '../components/MnText';
 import RestaurantService from '../services/RestaurantService';
 import { colors } from '../constants';
@@ -35,7 +36,7 @@ const Home = ({ navigation }) => {
             <FlatList
                 data={restaurants}
                 renderItem={({ item }) => (
-                    <RestaurantTile
+                    <RestaurantCard
                         item={item}
                         onPressItem={() => {
                             onPressRestaurant(item);
