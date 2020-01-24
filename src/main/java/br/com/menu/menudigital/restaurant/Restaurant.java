@@ -36,8 +36,13 @@ public class Restaurant {
 	}
 	
 	public String getUri() {
-		return ServletUriComponentsBuilder.fromCurrentContextPath()
-			    .path(String.format("images/restaurant/%s", this.id))
-			    .toUriString();
+		if(this.imagePath != null) {
+			return ServletUriComponentsBuilder.fromCurrentContextPath()
+				    .path(String.format("images/restaurant/%s", this.id))
+				    .toUriString();
+		}
+		
+		return null;
+	
 	}
 }

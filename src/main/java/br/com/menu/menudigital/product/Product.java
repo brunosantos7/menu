@@ -50,8 +50,13 @@ public class Product {
 	}
 	
 	public String getImageUri() {
-		return ServletUriComponentsBuilder.fromCurrentContextPath()
-			    .path(String.format("images/product/%s", this.id))
-			    .toUriString();
+		if(this.imagePath != null) {
+			return ServletUriComponentsBuilder.fromCurrentContextPath()
+				    .path(String.format("images/product/%s", this.id))
+				    .toUriString();
+		}
+		
+		return null;
+		
 	}
 }

@@ -43,9 +43,14 @@ public class Category {
 	}
 	
 	public String getImageUri() {
-		return ServletUriComponentsBuilder.fromCurrentContextPath()
-			    .path(String.format("images/category/%s", this.id))
-			    .toUriString();
+		if(this.imagePath != null) {
+			return ServletUriComponentsBuilder.fromCurrentContextPath()
+				    .path(String.format("images/category/%s", this.id))
+				    .toUriString();
+		}
+		
+		return null;
+		
 	}
 	
 	

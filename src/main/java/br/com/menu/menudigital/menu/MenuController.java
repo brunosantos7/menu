@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.menu.menudigital.category.Category;
 import br.com.menu.menudigital.category.CategoryRepository;
+import javassist.NotFoundException;
 
 @Controller
 @RequestMapping("/menu")
@@ -31,12 +32,12 @@ public class MenuController {
 	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Optional<Menu> getMenuById(@PathVariable Long id) throws Exception {
-		return menuRepository.findById(id);
+	public @ResponseBody Menu getMenuById(@PathVariable Long id) throws NotFoundException {
+		return menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id"));
 	}
 	
 	@GetMapping("/{id}/categories")
-	public @ResponseBody List<Category> getMenuCategoriesById(@PathVariable Long id) throws Exception {
+	public @ResponseBody List<Category> getMenuCategoriesById(@PathVariable Long id) {
 		return categoryRepository.findByMenuId(id);
 	}
 	
@@ -46,18 +47,18 @@ public class MenuController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Menu updateMenu(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) throws Exception {
-		Menu menu = menuRepository.findById(id).orElseThrow(() -> new Exception("Does not exist menu with this id."));
+	public @ResponseBody Menu updateMenu(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) throws NotFoundException {
+		Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
 		
-		menu.setRestaurantId(newMenuDTO.getRestaurantId());
+		menu.setRestaurantProfileId(newMenuDTO.getRestaurantProfileId());
 		menu.setTitle(newMenuDTO.getTitle());
 		
 		return menuRepository.save(menu);
 	}
 	
 	@DeleteMapping("/{id}")
-	public @ResponseBody String deleteMenu(@PathVariable("id") Long menuId) throws Exception {
-		Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new Exception("Does not exist menu with this id."));
+	public @ResponseBody String deleteMenu(@PathVariable("id") Long menuId) throws NotFoundException {
+		Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
 		menuRepository.delete(menu);
 		return "true";
 	}

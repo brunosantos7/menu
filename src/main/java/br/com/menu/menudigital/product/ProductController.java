@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javassist.NotFoundException;
+
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -50,7 +52,7 @@ public class ProductController {
 	
 	@PutMapping("/{id}")
 	public @ResponseBody Product updateCategory (@PathVariable Long id, ProductDTO productDTO, @RequestParam(name="file", required=false) MultipartFile file) throws Exception {
-		Product product = productRepository.findById(id).orElseThrow(() -> new Exception("Does not exist product with this id."));
+		Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist product with this id."));
 		product.setCategoryId(productDTO.getCategoryId());
 		product.setName(productDTO.getName());
 		product.setDescription(productDTO.getDescription());
@@ -59,7 +61,7 @@ public class ProductController {
 		
 		if(file != null) {
 			
-			if(Files.exists(path)) {
+			if(path.toFile().exists()) {
 		        FileSystemUtils.deleteRecursively(path.toFile());
 			}
 			

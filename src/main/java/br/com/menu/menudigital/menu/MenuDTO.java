@@ -3,7 +3,7 @@ package br.com.menu.menudigital.menu;
 public class MenuDTO {
 	
 	private String title;
-	private Long restaurantId;
+	private Long restaurantProfileId;
 
 	public String getTitle() {
 		return title;
@@ -11,16 +11,15 @@ public class MenuDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Long getRestaurantId() {
-		return restaurantId;
+	public Long getRestaurantProfileId() {
+		return restaurantProfileId;
 	}
-	public void setRestaurantId(Long restaurantId) {
-		this.restaurantId = restaurantId;
+	public void setRestaurantProfileId(Long restaurantProfileId) {
+		this.restaurantProfileId = restaurantProfileId;
 	}
-	
 	public Menu toMenuEntity() {
 		Menu menu = new Menu();
-		menu.setRestaurantId(this.getRestaurantId());
+		menu.setRestaurantProfileId(this.getRestaurantProfileId());
 		menu.setTitle(this.getTitle());
 		return menu;
 	}

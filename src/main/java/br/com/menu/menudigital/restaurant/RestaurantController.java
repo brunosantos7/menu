@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+
+import javax.activity.InvalidActivityException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileSystemUtils;
@@ -22,19 +25,28 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.menu.menudigital.menu.Menu;
 import br.com.menu.menudigital.menu.MenuRepository;
+import br.com.menu.menudigital.restaurantprofile.RestaurantProfile;
+import br.com.menu.menudigital.restaurantprofile.RestaurantProfileRepository;
+import br.com.menu.menudigital.user.User;
+import br.com.menu.menudigital.user.UserRepository;
+import javassist.NotFoundException;
 
 @Controller
 @RequestMapping("/restaurant")
 public class RestaurantController {
 
 	private RestaurantRepository restaurantRepository;
-	private MenuRepository menuRepository;
 
+	private RestaurantProfileRepository restaurantProfileRepository;
+
+	private UserRepository userRepository;
 	
-	public RestaurantController(RestaurantRepository restaurantRepository, MenuRepository menuRepository) {
+	public RestaurantController(RestaurantRepository restaurantRepository,
+			RestaurantProfileRepository restaurantProfileRepository, UserRepository userRepository) {
 		super();
 		this.restaurantRepository = restaurantRepository;
-		this.menuRepository = menuRepository;
+		this.restaurantProfileRepository = restaurantProfileRepository;
+		this.userRepository = userRepository;
 	}
 
 	@GetMapping
@@ -43,19 +55,27 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{id}")
-	public @ResponseBody Optional<Restaurant> getRestaurantById(@PathVariable Long id) throws Exception {
-		return restaurantRepository.findById(id);
+	public @ResponseBody Restaurant getRestaurantById(@PathVariable Long id) throws NotFoundException {
+		return restaurantRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist restaurant with this id"));
 	}
 	
-	@GetMapping("/{id}/menus")
-	public @ResponseBody List<Menu> getResrtaurantMenus(@PathVariable Long id) {
-		return menuRepository.findByRestaurantId(id);
+	@GetMapping("/{id}/profiles")
+	public @ResponseBody List<RestaurantProfile> getRestaurantProfileByRestaurantId(@PathVariable Long id) {
+		return restaurantProfileRepository.findByRestaurantId(id);
 	}
 	
 	@PostMapping
-	public @ResponseBody Restaurant save(RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
-
+	public @ResponseBody Restaurant save(RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) throws IOException {
+		User user = userRepository.findByUsername(principal.getName());
+		
+		if(user.getRestaurantId() != null) {
+			throw new InvalidActivityException("Nao e possivel cadastrar mais de um restaurante por usuario.");
+		}
+		
 		Restaurant newRes = restaurantRepository.save(newRestaurantDTO.toRestaurantEntity());
+		
+		user.setRestaurantId(newRes.getId());
+		userRepository.save(user);
 		
 		if(file != null) {
 			Path path = Paths.get(String.format("images/restaurant/%s", newRes.getId()));
@@ -74,8 +94,8 @@ public class RestaurantController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Restaurant updateRestaurant(@PathVariable Long id, RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file) throws Exception {
-		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new Exception("Does not exist restaurant with this id."));
+	public @ResponseBody Restaurant updateRestaurant(@PathVariable Long id, RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) throws NotFoundException, IOException {
+		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist restaurant with this id."));
 		
 		restaurant.setName(newRestaurantDTO.getName());
 		Restaurant updatedRest = restaurantRepository.save(restaurant);
@@ -84,7 +104,7 @@ public class RestaurantController {
 		
 		if(file != null) {
 			
-			if(Files.exists(path)) {
+			if(path.toFile().exists()) {
 		        FileSystemUtils.deleteRecursively(path.toFile());
 			}
 			
@@ -104,8 +124,19 @@ public class RestaurantController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public @ResponseBody void deleteRestaurant(@PathVariable("id") Long restaurantId) throws Exception {
-		Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new Exception("Does not exist restaurant with this id."));
+	public @ResponseBody void deleteRestaurant(@PathVariable("id") Long restaurantId) throws NotFoundException {
+		Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new NotFoundException("Does not exist restaurant with this id."));
+		Path path = Paths.get(String.format("images/restaurant/%s", restaurant.getId()));
+		FileSystemUtils.deleteRecursively(path.toFile());
+		
+		Optional<User> userOwner = userRepository.findByRestaurantId(restaurant.getId());
+		if(userOwner.isPresent()) {
+			User user = userOwner.get();
+			user.setRestaurantId(null);
+			userRepository.save(user);
+		}
+		
 		restaurantRepository.delete(restaurant);
+
 	}
 }

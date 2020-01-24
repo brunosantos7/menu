@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.menu.menudigital.product.Product;
 import br.com.menu.menudigital.product.ProductRepository;
+import javassist.NotFoundException;
 
 
 @Controller
@@ -37,7 +38,7 @@ public class CategoryController {
 		this.productRepository = productRepository;
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id}/products")
 	public @ResponseBody List<Product> getProductsByCategory(@PathVariable Long id){
 		return this.productRepository.findByCategoryId(id);
 	}
@@ -63,8 +64,8 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Category updateCategory (@PathVariable Long id, CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws Exception {
-		Category category = categoryRepository.findById(id).orElseThrow(() -> new Exception("Does not exist category with this id."));
+	public @ResponseBody Category updateCategory (@PathVariable Long id, CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws NotFoundException, IOException {
+		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
 		category.setMenuId(categoryDTO.getMenuId());
 		category.setName(categoryDTO.getName());
 		
@@ -72,7 +73,7 @@ public class CategoryController {
 		
 		if(file != null) {
 			
-			if(Files.exists(path)) {
+			if(path.toFile().exists()) {
 		        FileSystemUtils.deleteRecursively(path.toFile());
 			}
 			
@@ -92,8 +93,8 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteCategory(@PathVariable Long id) throws Exception {
-		Category category = categoryRepository.findById(id).orElseThrow(() -> new Exception("Does not exist category with this id."));
+	public void deleteCategory(@PathVariable Long id) throws NotFoundException {
+		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
 		categoryRepository.delete(category);
 	}
 }

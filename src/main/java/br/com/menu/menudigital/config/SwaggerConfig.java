@@ -1,4 +1,4 @@
-package br.com.menu.config;
+package br.com.menu.menudigital.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

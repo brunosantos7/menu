@@ -31,17 +31,42 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `menudb`.`restaurant_profile`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `menudb`.`restaurant_profile` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `street` VARCHAR(255) NOT NULL,
+  `phone` VARCHAR(45) NOT NULL,
+  `restaurant_id` INT(11) NOT NULL,
+  `neighborhood` VARCHAR(100) NOT NULL,
+  `state` VARCHAR(50) NOT NULL,
+  `cep` INT(8) NOT NULL,
+  `city` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(50) NULL,
+  `number` INT(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_restaurante_profile_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
+  CONSTRAINT `fk_restaurante_profile_restaurant1`
+    FOREIGN KEY (`restaurant_id`)
+    REFERENCES `menudb`.`restaurant` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `menudb`.`menu`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`menu` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NULL DEFAULT NULL,
-  `restaurant_id` INT(11) NOT NULL,
+  `restaurant_profile_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_menu_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
-  CONSTRAINT `fk_menu_restaurant1`
-    FOREIGN KEY (`restaurant_id`)
-    REFERENCES `menudb`.`restaurant` (`id`))
+  INDEX `fk_menu_restaurant_profile1_idx` (`restaurant_profile_id` ASC) VISIBLE,
+  CONSTRAINT `fk_menu_restaurant_profile1`
+    FOREIGN KEY (`restaurant_profile_id`)
+    REFERENCES `menudb`.`restaurant_profile` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8;
@@ -73,29 +98,11 @@ CREATE TABLE IF NOT EXISTS `menudb`.`product` (
   `name` VARCHAR(100) NOT NULL,
   `description` VARCHAR(45) NULL DEFAULT NULL,
   `category_id` INT(11) NOT NULL,
-  `image_path` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_product_category1_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `fk_product_category1`
     FOREIGN KEY (`category_id`)
     REFERENCES `menudb`.`category` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `menudb`.`restaurant_profile`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `menudb`.`restaurant_profile` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `address` VARCHAR(100) NOT NULL,
-  `phone` VARCHAR(45) NULL DEFAULT NULL,
-  `restaurant_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_restaurante_profile_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
-  CONSTRAINT `fk_restaurante_profile_restaurant1`
-    FOREIGN KEY (`restaurant_id`)
-    REFERENCES `menudb`.`restaurant` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -108,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user` (
   `username` VARCHAR(100) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   `user_type` INT(11) NOT NULL,
-  `restaurant_id` INT(11) NOT NULL,
+  `restaurant_id` INT(11) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_user_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
   CONSTRAINT `fk_user_restaurant1`

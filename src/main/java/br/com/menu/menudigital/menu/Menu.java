@@ -14,7 +14,7 @@ public class Menu {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String title;
-	private Long restaurantId;
+	private Long restaurantProfileId;
 	
 	public Long getId() {
 		return id;
@@ -28,11 +28,10 @@ public class Menu {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Long getRestaurantId() {
-		return restaurantId;
+	public Long getRestaurantProfileId() {
+		return restaurantProfileId;
 	}
-	public void setRestaurantId(Long restaurantId) {
-		this.restaurantId = restaurantId;
+	public void setRestaurantProfileId(Long restaurantProfileId) {
+		this.restaurantProfileId = restaurantProfileId;
 	}
-	
 }

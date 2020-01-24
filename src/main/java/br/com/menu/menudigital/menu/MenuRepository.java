@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface MenuRepository extends CrudRepository<Menu, Long>{
 
-	List<Menu> findByRestaurantId(Long restaurantId);
+	List<Menu> findByRestaurantProfileId(Long restaurantProfileId);
 
 }
