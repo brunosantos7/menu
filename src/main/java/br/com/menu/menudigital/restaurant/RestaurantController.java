@@ -137,6 +137,5 @@ public class RestaurantController {
 		}
 		
 		restaurantRepository.delete(restaurant);
-
 	}
 }

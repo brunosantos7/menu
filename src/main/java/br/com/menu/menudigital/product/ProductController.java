@@ -57,7 +57,7 @@ public class ProductController {
 		product.setName(productDTO.getName());
 		product.setDescription(productDTO.getDescription());
 		
-		Path path = Paths.get(String.format("images/PRODUCT/%s", product.getId())); 
+		Path path = Paths.get(String.format("images/product/%s", product.getId())); 
 		
 		if(file != null) {
 			
@@ -81,8 +81,12 @@ public class ProductController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteCategory(@PathVariable Long id) throws Exception {
-		Product product = productRepository.findById(id).orElseThrow(() -> new Exception("Does not exist product with this id."));
+	public @ResponseBody void deleteCategory(@PathVariable Long id) throws NotFoundException {
+		Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist product with this id."));
+
+		Path path = Paths.get(String.format("images/product/%s", product.getId())); 
+        FileSystemUtils.deleteRecursively(path.toFile());
+        
 		productRepository.delete(product);
 	}
 

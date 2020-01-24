@@ -93,8 +93,11 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteCategory(@PathVariable Long id) throws NotFoundException {
+	public @ResponseBody void deleteCategory(@PathVariable Long id) throws NotFoundException {
 		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
+		Path path = Paths.get(String.format("images/category/%s", category.getId()));
+		FileSystemUtils.deleteRecursively(path.toFile());
+		
 		categoryRepository.delete(category);
 	}
 }

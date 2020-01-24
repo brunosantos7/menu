@@ -42,12 +42,12 @@ public class MenuController {
 	}
 	
 	@PostMapping
-	public @ResponseBody Menu saveMenu(@RequestBody MenuDTO newMenuDTO) {
+	public @ResponseBody Menu save(@RequestBody MenuDTO newMenuDTO) {
 		return menuRepository.save(newMenuDTO.toMenuEntity());
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Menu updateMenu(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) throws NotFoundException {
+	public @ResponseBody Menu update(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) throws NotFoundException {
 		Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
 		
 		menu.setRestaurantProfileId(newMenuDTO.getRestaurantProfileId());
@@ -57,10 +57,9 @@ public class MenuController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public @ResponseBody String deleteMenu(@PathVariable("id") Long menuId) throws NotFoundException {
+	public @ResponseBody void delete(@PathVariable("id") Long menuId) throws NotFoundException {
 		Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
 		menuRepository.delete(menu);
-		return "true";
 	}
 	
 	

@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `menudb`.`product` (
   `name` VARCHAR(100) NOT NULL,
   `description` VARCHAR(45) NULL DEFAULT NULL,
   `category_id` INT(11) NOT NULL,
+  `image_path` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_product_category1_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `fk_product_category1`
