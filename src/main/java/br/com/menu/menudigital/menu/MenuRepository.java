@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface MenuRepository extends CrudRepository<Menu, Long>{
+public interface MenuRepository extends CrudRepository<Menu, Long> {
 
-	List<Menu> findByRestaurantProfileId(Long restaurantProfileId);
+	List<Menu> findByRestaurantId(Long restaurantId);
 
 }

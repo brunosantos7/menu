@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -44,7 +46,7 @@ public class CategoryController {
 	}
 
 	@PostMapping
-	public @ResponseBody Category saveCategory(CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
+	public @ResponseBody Category saveCategory(@Valid CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
 		Category category = categoryRepository.save(categoryDTO.toEntity());
 		
 		if(file != null) {
@@ -64,10 +66,19 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Category updateCategory (@PathVariable Long id, CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws NotFoundException, IOException {
+	public @ResponseBody Category updateCategory (@PathVariable Long id, @Valid CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws NotFoundException, IOException {
 		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
-		category.setMenuId(categoryDTO.getMenuId());
-		category.setName(categoryDTO.getName());
+		
+		Category entityToSave = categoryDTO.toEntity();
+		entityToSave.setId(category.getId());
+		entityToSave.setImagePath(category.getImagePath());
+		
+		return categoryRepository.save(entityToSave);
+	}
+	
+	@PutMapping("/{id}/image")
+	public @ResponseBody Category updateCategoryImage (@PathVariable Long id, @RequestParam(name="file", required=false) MultipartFile file) throws NotFoundException, IOException {
+		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
 		
 		Path path = Paths.get(String.format("images/category/%s", category.getId())); 
 		
@@ -88,13 +99,14 @@ public class CategoryController {
 	        FileSystemUtils.deleteRecursively(path.toFile());
 	        category.setImagePath(null);
 		}
-
+		
 		return categoryRepository.save(category);
 	}
 	
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteCategory(@PathVariable Long id) throws NotFoundException {
 		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
+		
 		Path path = Paths.get(String.format("images/category/%s", category.getId()));
 		FileSystemUtils.deleteRecursively(path.toFile());
 		

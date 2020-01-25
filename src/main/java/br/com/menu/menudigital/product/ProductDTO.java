@@ -1,17 +1,18 @@
 package br.com.menu.menudigital.product;
 
+import javax.validation.constraints.NotNull;
+
 public class ProductDTO {
 
-	private Long id;
+	@NotNull
 	private String name;
+	@NotNull
 	private String description;
+	@NotNull
 	private Long categoryId;
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+	@NotNull
+	private Long restaurantId;
+	
 	public String getName() {
 		return name;
 	}
@@ -30,13 +31,19 @@ public class ProductDTO {
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
 	}
-	
+	public Long getRestaurantId() {
+		return restaurantId;
+	}
+	public void setRestaurantId(Long restaurantId) {
+		this.restaurantId = restaurantId;
+	}
 	public Product toEntity() {
 		Product product = new Product();
+		
 		product.setCategoryId(this.getCategoryId());
 		product.setDescription(this.getDescription());
 		product.setName(this.getName());
-		product.setId(this.getId());
+		product.setRestaurantId(this.getRestaurantId());
 		return product;
 	}
 }

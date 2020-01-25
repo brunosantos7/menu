@@ -7,6 +7,8 @@ import javax.persistence.Id;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Category {
 	
@@ -14,8 +16,12 @@ public class Category {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String imagePath;
 	private Long menuId;
+	
+	@JsonIgnore
+	private Long restaurantId;
+	@JsonIgnore
+	private String imagePath;
 	
 	public Long getId() {
 		return id;
@@ -41,7 +47,12 @@ public class Category {
 	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
 	}
-	
+	public Long getRestaurantId() {
+		return restaurantId;
+	}
+	public void setRestaurantId(Long restaurantId) {
+		this.restaurantId = restaurantId;
+	}
 	public String getImageUri() {
 		if(this.imagePath != null) {
 			return ServletUriComponentsBuilder.fromCurrentContextPath()

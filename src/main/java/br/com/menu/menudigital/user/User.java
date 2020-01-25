@@ -1,11 +1,18 @@
 package br.com.menu.menudigital.user;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.menu.menudigital.restaurant.Restaurant;
 
 @Entity
 public class User {
@@ -18,7 +25,12 @@ public class User {
 	@JsonIgnore
 	private String password;
 	private Integer userType;
-	private Long restaurantId;
+
+	@ManyToMany
+	@JoinTable(name="userHasRestaurant",
+	joinColumns= @JoinColumn(name="userId"), 
+	inverseJoinColumns= @JoinColumn(name="restaurantId"))
+	private List<Restaurant> restaurants;
 	
 	public Long getId() {
 		return id;
@@ -44,10 +56,10 @@ public class User {
 	public void setUserType(Integer userType) {
 		this.userType = userType;
 	}
-	public Long getRestaurantId() {
-		return restaurantId;
+	public List<Restaurant> getRestaurants() {
+		return restaurants;
 	}
-	public void setRestaurantId(Long restaurantId) {
-		this.restaurantId = restaurantId;
+	public void setRestaurants(List<Restaurant> restaurants) {
+		this.restaurants = restaurants;
 	}
 }

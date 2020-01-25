@@ -49,7 +49,6 @@ public class UserDTO  {
 		User user = new User();
 		user.setPassword(this.getPassword());
 		user.setUserType(this.getUserType());
-		user.setRestaurantId(this.getRestaurantId());
 		user.setUsername(this.getUsername());
 		
 		return user;

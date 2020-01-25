@@ -1,7 +1,6 @@
 package br.com.menu.menudigital.menu;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,7 +49,7 @@ public class MenuController {
 	public @ResponseBody Menu update(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) throws NotFoundException {
 		Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
 		
-		menu.setRestaurantProfileId(newMenuDTO.getRestaurantProfileId());
+		menu.setRestaurantId(newMenuDTO.getRestaurantId());
 		menu.setTitle(newMenuDTO.getTitle());
 		
 		return menuRepository.save(menu);

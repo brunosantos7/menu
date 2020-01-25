@@ -1,9 +1,13 @@
 package br.com.menu.menudigital.user;
 
+import java.util.Optional;
+
 import javax.management.BadAttributeValueExpException;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +39,10 @@ public class UserController {
 		userDto.setPassword(encoded);
 		
 		return userRepository.save(userDto.toEntity());
+	}
+	
+	@GetMapping("/{id}")
+	public @ResponseBody Optional<User> findUserById(@PathVariable Long id) {
+		return userRepository.findById(id);
 	}
 }

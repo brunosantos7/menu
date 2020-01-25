@@ -1,19 +1,17 @@
-package br.com.menu.menudigital.menu;
+package br.com.menu.menudigital.userhasrestaurant;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="menu")
-public class Menu {
+public class UserHasRestaurant {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private String title;
+	private Long userId;
 	private Long restaurantId;
 	
 	public Long getId() {
@@ -22,11 +20,11 @@ public class Menu {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getTitle() {
-		return title;
+	public Long getUserId() {
+		return userId;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	public Long getRestaurantId() {
 		return restaurantId;
@@ -34,4 +32,5 @@ public class Menu {
 	public void setRestaurantId(Long restaurantId) {
 		this.restaurantId = restaurantId;
 	}
+	
 }
