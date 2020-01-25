@@ -4,10 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { colors } from '../constants';
 
-const InputSearch = ({ value, placeholder, onChange }) => {
+const InputSearch = ({ value, placeholder, onChange, onSubmit }) => {
     function onChangeText(text) {
         if (onChange) {
             onChange(text);
+        }
+    }
+
+    function onSubmitEditing(event) {
+        if (onSubmit) {
+            onSubmit(event.nativeEvent.text);
         }
     }
 
@@ -22,6 +28,7 @@ const InputSearch = ({ value, placeholder, onChange }) => {
             <TextInput
                 style={styles.input}
                 onChangeText={text => onChangeText(text)}
+                onSubmitEditing={onSubmitEditing}
                 value={value}
                 placeholder={placeholder}
             />

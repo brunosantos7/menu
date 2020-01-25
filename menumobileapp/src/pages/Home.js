@@ -18,18 +18,22 @@ const Home = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
 
     useEffect(() => {
-        async function init() {
-            const items = await RestaurantService.getRestaurants();
-            setRestaurants(items);
-        }
-
-        init();
+        getRestaurants();
     }, []);
 
     function onPressRestaurant(restaurant) {
         navigation.navigate('CategoryList', {
             restaurant: restaurant,
         });
+    }
+
+    async function getRestaurants() {
+        const items = await RestaurantService.getRestaurants();
+        setRestaurants(items);
+    }
+
+    function onSubmitSearch(searchText) {
+        getRestaurants();
     }
 
     return (
@@ -49,7 +53,10 @@ const Home = ({ navigation }) => {
                     <View style={styles.header}>
                         <MnText bold style={styles.headerTitle}>Busca</MnText>
                         <View style={styles.headerSearch}>
-                            <InputSearch placeholder="Busque por item ou restaurante" />
+                            <InputSearch 
+                                placeholder="Busque por item ou restaurante" 
+                                onSubmit={onSubmitSearch}
+                            />
                         </View>
 
                         <MnText bold style={styles.headerTitle}>Restaurantes</MnText>

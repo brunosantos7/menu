@@ -9,12 +9,12 @@ const RestaurantCard = ({ item, onPressItem }) => {
     return (
         <TouchableOpacity style={styles.tile} onPress={onPressItem} activeOpacity={0.9}>
             <View style={styles.imageContainer}>
-                {item.image && <Image style={styles.image} source={item.image} />}
+                {item.uri && <Image style={styles.image} source={{uri: item.uri}} />}
             </View>
             <View style={styles.detailsView}>
                 <View>
                     <MnText bold style={styles.title}>{item.name}</MnText>
-                    <MnText style={styles.subtitle}>{item.category}</MnText>
+                    <MnText style={styles.subtitle}>{item.street}</MnText>
                 </View>
                 <FontAwesomeIcon icon={faStar} size={28} color={colors.white} />
             </View>
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     tile: {
         marginHorizontal: 15,
         marginVertical: 7,
-        backgroundColor: '#FFFFFF',
         shadowColor: '#CCCCCC',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         height: 230,
-        backgroundColor: colors.lightGray,
+        backgroundColor: colors.white,
     },
     image: {
         height: 170,

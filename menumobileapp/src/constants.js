@@ -7,3 +7,7 @@ export const colors = {
     gray: '#999999',
     background: 'rgb(245, 245, 245)',
 };
+
+export const api = {
+    baseUrl: 'http://localhost:8080',
+};
