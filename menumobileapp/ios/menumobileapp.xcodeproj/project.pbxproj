@@ -25,6 +25,10 @@
 		4F0DA869AD7640039815894F /* Muli-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71D855A3909D4BF0811694E7 /* Muli-Italic.ttf */; };
 		31D4D7E014E44E5C8DDD5378 /* Muli-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8EC05DA162B4A61BED0474E /* Muli-Light.ttf */; };
 		5E1E5D8AFCFD40AA9E564215 /* Muli-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F37461BCE7454263BC7E8DFE /* Muli-Regular.ttf */; };
+		7959EEF1D5094EA88BC3CD60 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8778B40389D340F196C18F6E /* OpenSans-Bold.ttf */; };
+		CF93311CCDEE4DC784166564 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D42903194FF4C41BC506915 /* OpenSans-ExtraBold.ttf */; };
+		1BD5AB1DFBA246E493B0480C /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B636B8BADBD41F39BAF5F66 /* OpenSans-Light.ttf */; };
+		970CD075CF85448988D0B51D /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F41F119889ED476ABBFEDC8F /* OpenSans-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +89,10 @@
 		71D855A3909D4BF0811694E7 /* Muli-Italic.ttf */ = {isa = PBXFileReference; name = "Muli-Italic.ttf"; path = "../assets/fonts/Muli-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F8EC05DA162B4A61BED0474E /* Muli-Light.ttf */ = {isa = PBXFileReference; name = "Muli-Light.ttf"; path = "../assets/fonts/Muli-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F37461BCE7454263BC7E8DFE /* Muli-Regular.ttf */ = {isa = PBXFileReference; name = "Muli-Regular.ttf"; path = "../assets/fonts/Muli-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8778B40389D340F196C18F6E /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; name = "OpenSans-Bold.ttf"; path = "../assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6D42903194FF4C41BC506915 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-ExtraBold.ttf"; path = "../assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7B636B8BADBD41F39BAF5F66 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; name = "OpenSans-Light.ttf"; path = "../assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F41F119889ED476ABBFEDC8F /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +241,10 @@
 				71D855A3909D4BF0811694E7 /* Muli-Italic.ttf */,
 				F8EC05DA162B4A61BED0474E /* Muli-Light.ttf */,
 				F37461BCE7454263BC7E8DFE /* Muli-Regular.ttf */,
+				8778B40389D340F196C18F6E /* OpenSans-Bold.ttf */,
+				6D42903194FF4C41BC506915 /* OpenSans-ExtraBold.ttf */,
+				7B636B8BADBD41F39BAF5F66 /* OpenSans-Light.ttf */,
+				F41F119889ED476ABBFEDC8F /* OpenSans-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -383,6 +395,10 @@
 				4F0DA869AD7640039815894F /* Muli-Italic.ttf in Resources */,
 				31D4D7E014E44E5C8DDD5378 /* Muli-Light.ttf in Resources */,
 				5E1E5D8AFCFD40AA9E564215 /* Muli-Regular.ttf in Resources */,
+				7959EEF1D5094EA88BC3CD60 /* OpenSans-Bold.ttf in Resources */,
+				CF93311CCDEE4DC784166564 /* OpenSans-ExtraBold.ttf in Resources */,
+				1BD5AB1DFBA246E493B0480C /* OpenSans-Light.ttf in Resources */,
+				970CD075CF85448988D0B51D /* OpenSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

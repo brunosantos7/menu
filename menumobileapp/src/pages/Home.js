@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import RestaurantTile from '../components/RestaurantTile';
 import RestaurantCard from '../components/RestaurantCard';
+import RestaurantCard1 from '../components/RestaurantCard1';
 import MnText from '../components/MnText';
 import RestaurantService from '../services/RestaurantService';
 import { colors } from '../constants';
@@ -36,7 +37,7 @@ const Home = ({ navigation }) => {
             <FlatList
                 data={restaurants}
                 renderItem={({ item }) => (
-                    <RestaurantCard
+                    <RestaurantCard1
                         item={item}
                         onPressItem={() => {
                             onPressRestaurant(item);
@@ -46,12 +47,12 @@ const Home = ({ navigation }) => {
                 keyExtractor={item => item.id.toString()}
                 ListHeaderComponent={() => (
                     <View style={styles.header}>
-                        <MnText style={styles.headerTitle}>Busca</MnText>
+                        <MnText bold style={styles.headerTitle}>Busca</MnText>
                         <View style={styles.headerSearch}>
                             <InputSearch placeholder="Busque por item ou restaurante" />
                         </View>
 
-                        <MnText style={styles.headerTitle}>Restaurantes</MnText>
+                        <MnText bold style={styles.headerTitle}>Restaurantes</MnText>
                         <View style={styles.headerCity}>
                             <MnText style={styles.headerSubTitle}>
                                 em Araguari/MG

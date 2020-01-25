@@ -5,5 +5,5 @@ export const colors = {
     blue: 'blue',
     lightGray: 'rgb(245, 245, 245)',
     gray: '#999999',
-    background: '#FFFFFF',
+    background: 'rgb(245, 245, 245)',
 };

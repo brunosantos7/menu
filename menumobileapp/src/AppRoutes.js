@@ -15,7 +15,7 @@ const headerStyle = {
 
 const headerTitleStyle = {
     fontSize: 18,
-    fontFamily: 'Muli',
+    fontFamily: 'OpenSans-Regular',
     color: colors.primary,
 };
 

@@ -18,16 +18,16 @@ const MnText = props => {
 
 const styles = StyleSheet.create({
     black: {
-        fontFamily: 'Muli-Black',
+        fontFamily: 'OpenSans-ExtraBold',
     },
     bold: {
-        fontFamily: 'Muli-Bold',
+        fontFamily: 'OpenSans-Bold',
     },
     regular: {
-        fontFamily: 'Muli',
+        fontFamily: 'OpenSans-Regular',
     },
     light: {
-        fontFamily: 'Muli-Light',
+        fontFamily: 'OpenSans-Light',
     },
 });
 
