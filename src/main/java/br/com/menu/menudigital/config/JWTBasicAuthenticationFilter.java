@@ -49,10 +49,10 @@ public class JWTBasicAuthenticationFilter extends BasicAuthenticationFilter {
 					null, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			chain.doFilter(request, response);
-
 		} catch (JWTVerificationException e) {
 		}
+
+		chain.doFilter(request, response);
 	}
 
 }

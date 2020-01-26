@@ -1,5 +1,8 @@
 package br.com.menu.menudigital.authentication;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,9 +31,10 @@ public class AuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException("Usuario e senha incorretos!", e);
 		}
-
-		return JWT.create().withClaim("username", authenticationRequest.getUsername()).sign(Algorithm.HMAC256("thesecret"));
-		
+		long nowMillis = System.currentTimeMillis();
+	    Date now = new Date(nowMillis);
+	    			
+		return JWT.create().withClaim("username", authenticationRequest.getUsername()).withIssuedAt(now).withExpiresAt(new Date(nowMillis + TimeUnit.DAYS.toMillis(1))).sign(Algorithm.HMAC256("thesecret"));
 	}
 	
 }

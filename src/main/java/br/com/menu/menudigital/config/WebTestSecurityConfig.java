@@ -38,19 +38,19 @@ public class WebTestSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET).permitAll()
 			.anyRequest().authenticated()
 			.and()
-			.addFilter(jwtUsernamePasswordAuthenticationFilter())
+//			.addFilter(jwtUsernamePasswordAuthenticationFilter())
 			.addFilter(jwtBasicAuthenticationFilter())
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.logout().permitAll();
 		}
 		
-		@Bean
-		public JWTUsernamePasswordAuthenticationFilter jwtUsernamePasswordAuthenticationFilter() throws Exception {
-			JWTUsernamePasswordAuthenticationFilter auth = new JWTUsernamePasswordAuthenticationFilter();
-			auth.setAuthenticationManager(this.authenticationManager());
-			return auth;
-		}
+//		@Bean
+//		public JWTUsernamePasswordAuthenticationFilter jwtUsernamePasswordAuthenticationFilter() throws Exception {
+//			JWTUsernamePasswordAuthenticationFilter auth = new JWTUsernamePasswordAuthenticationFilter();
+//			auth.setAuthenticationManager(this.authenticationManager());
+//			return auth;
+//		}
 		
 		@Bean
 		public JWTBasicAuthenticationFilter jwtBasicAuthenticationFilter() throws Exception {
