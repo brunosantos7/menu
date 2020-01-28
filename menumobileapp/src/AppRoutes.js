@@ -3,6 +3,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoadingPage from './pages/LoadingPage';
 import Home from './pages/Home';
+import Restaurant from './pages/Restaurant';
 import CategoryList from './pages/CategoryList';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
@@ -48,6 +49,13 @@ const AppNavigator = createStackNavigator(
                 // title: navigation.navigation.getParam('title', 'Menu'),
                 header: () => <></>,
             }),
+        },
+        Restaurant: {
+            screen: Restaurant,
+            navigationOptions: (navigation) => ({
+                title: navigation.navigation.getParam('title', 'Restaurante'),
+                headerLeft: () => <MnBackButton />,
+            })
         },
         CategoryList: {
             screen: CategoryList,

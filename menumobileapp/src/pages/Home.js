@@ -22,7 +22,8 @@ const Home = ({ navigation }) => {
     }, []);
 
     function onPressRestaurant(restaurant) {
-        navigation.navigate('CategoryList', {
+        navigation.navigate('Restaurant', {
+            title: restaurant.name,
             restaurant: restaurant,
         });
     }
