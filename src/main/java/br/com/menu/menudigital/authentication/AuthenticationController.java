@@ -31,6 +31,7 @@ public class AuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException("Usuario e senha incorretos!", e);
 		}
+		
 		long nowMillis = System.currentTimeMillis();
 	    Date now = new Date(nowMillis);
 	    			
