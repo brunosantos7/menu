@@ -46,7 +46,7 @@ public class CategoryController {
 	}
 
 	@PostMapping
-	public @ResponseBody Category saveCategory(@Valid CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
+	public @ResponseBody Category save(@Valid CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
 		Category category = categoryRepository.save(categoryDTO.toEntity());
 		
 		if(file != null) {
@@ -66,7 +66,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Category updateCategory (@PathVariable Long id, @Valid CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws NotFoundException, IOException {
+	public @ResponseBody Category update (@PathVariable Long id, @Valid CategoryDTO categoryDTO, @RequestParam(name="file", required=false) MultipartFile file) throws NotFoundException, IOException {
 		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
 		
 		Category entityToSave = categoryDTO.toEntity();
@@ -104,7 +104,7 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public @ResponseBody void deleteCategory(@PathVariable Long id) throws NotFoundException {
+	public @ResponseBody void delete(@PathVariable Long id) throws NotFoundException {
 		Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist category with this id."));
 		
 		Path path = Paths.get(String.format("images/category/%s", category.getId()));
