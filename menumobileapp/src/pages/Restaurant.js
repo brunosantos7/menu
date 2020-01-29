@@ -5,51 +5,59 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
     faUtensils,
-    faPhoneAlt
+    faPhoneAlt,
+    faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
 import MnText from '../components/MnText';
 import { colors } from '../constants';
 import MenuService from '../services/MenuService';
 import RestaurantService from '../services/RestaurantService';
 
+const tileWidth = (Math.round(Dimensions.get('window').width) - 45) / 2;
+
 const RestaurantHeader = ({ restaurant }) => {
-    if (restaurant.uri) {
-        return (
-            <View style={styles.header}>
-                <Image style={styles.image} source={{ uri: restaurant.uri }} />
-                <View style={styles.details}>
-                    <MnText bold style={styles.title}>{restaurant.name}</MnText>
-                    <MnText style={styles.subtitle}>{restaurant.street + ', ' + restaurant.number}</MnText>
-                    <MnText style={styles.subtitle}>{restaurant.neighborhood + ' - ' + restaurant.city + '/' + restaurant.state}</MnText>
-                    <View style={styles.phone}>
-                        <FontAwesomeIcon icon={faPhoneAlt} size={16} color={colors.white} />
-                        <MnText bold style={styles.phoneText}>{restaurant.phone}</MnText>
+    return (
+        <View style={styles.header}>
+            {restaurant.uri && <Image style={styles.image} source={{ uri: restaurant.uri }} />}
+            <View style={styles.details}>
+                <MnText bold style={styles.title}>Sobre</MnText>
+                <View style={styles.detailRow}>
+                    <FontAwesomeIcon icon={faMapMarkerAlt} size={20} color={colors.black} />
+                    <View style={{marginLeft: 10}}>
+                        <MnText style={styles.subtitle}>{restaurant.street + ', ' + restaurant.number}</MnText>
+                        <MnText style={styles.subtitle}>{restaurant.neighborhood + ' - ' + restaurant.city + '/' + restaurant.state}</MnText>
+                    </View>
+                </View>
+                <View style={styles.detailRow}>
+                    <FontAwesomeIcon icon={faPhoneAlt} size={20} color={colors.black} />
+                    <View style={{marginLeft: 10}}>
+                        <MnText style={styles.subtitle}>{restaurant.phone}</MnText>
                     </View>
                 </View>
             </View>
-        );
-    }
-
-    return <RestaurantHeaderNoImage restaurant={restaurant} />;
-};
-
-const RestaurantHeaderNoImage = ({ restaurant }) => {
-    return <MnText>{restaurant.name}</MnText>;
+        </View>
+    );
 };
 
 const CategoryItemImage = ({ category }) => {
-    if (category.uri) {
-
+    if (category.imageUri) {
+        return (
+            <Image 
+                style={styles.categoryImage} 
+                source={{ uri: category.imageUri }} 
+            />
+        );
     }
 
     return (
         <FontAwesomeIcon
             icon={faUtensils}
-            size={40}
+            size={80}
             color={colors.white}
         />
     );
@@ -57,13 +65,15 @@ const CategoryItemImage = ({ category }) => {
 
 const CategoryItem = ({ category }) => {
     return (
-        <TouchableOpacity style={styles.category}>
+        <TouchableOpacity style={styles.category} activeOpacity={0.6}>
             <View style={styles.categoryIcon}>
                 <CategoryItemImage category={category} />
             </View>
-            <MnText bold style={styles.categoryName}>
-                {category.name}
-            </MnText>
+            <View style={styles.categoryMask}>
+                <MnText light style={styles.categoryName}>
+                    {category.name}
+                </MnText>
+            </View>
         </TouchableOpacity>
     );
 };
@@ -104,11 +114,17 @@ const Restaurant = ({ navigation }) => {
         <View style={styles.container}>
             <FlatList
                 data={categories}
+                numColumns={2}
                 renderItem={({ item }) => <CategoryItem category={item} />}
                 keyExtractor={item => item.id.toString()}
+                columnWrapperStyle={styles.listColumnWrapper}
                 ListHeaderComponent={() => (
                     <RestaurantHeader restaurant={restaurant} />
                 )}
+                ListHeaderComponentStyle={styles.listHeaderStyle}
+                // ListFooterComponent={() => (
+                //     <View style={{height: 15, backgroundColor: colors.white}} />
+                // )}
             />
         </View>
     );
@@ -117,35 +133,36 @@ const Restaurant = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // marginVertical: 15,
-        // marginHorizontal: 15,
     },
     header: {
-        height: 190,
-        backgroundColor: colors.white,
+        backgroundColor: colors.lightGray,
     },
     image: {
-        height: 190,
+        height: 220,
         width: '100%',
         flex: 1,
         resizeMode: 'cover',
     },
     details: {
+        marginTop: 10,
         flex: 1,
+        backgroundColor: colors.white,
+        paddingHorizontal: 10,
+        paddingVertical: 15,
+    },
+    detailRow: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        height: 190,
-        position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)'
+        justifyContent: 'flex-start',
+        marginTop: 10,
     },
     title: {
-        fontSize: 32,
-        color: colors.white,
+        fontSize: 16,
+        color: colors.black,
     },
     subtitle: {
         fontSize: 14,
-        color: colors.white,
+        color: colors.black,
     },
     phone: {
         flexDirection: 'row',
@@ -161,32 +178,43 @@ const styles = StyleSheet.create({
         color: colors.white,
         marginLeft: 10,
     },
+    listHeaderStyle: {
+        marginBottom: 10,
+    },
+    listColumnWrapper: {
+        justifyContent: 'space-between',
+        backgroundColor: colors.white,
+        paddingHorizontal: 15,
+        paddingTop: 15,
+    },
     category: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: colors.white,
-        marginTop: 10,
-        shadowColor: '#CCCCCC',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        borderWidth: 1,
-        borderColor: colors.lightGray,
+        width: tileWidth,
+    },
+    categoryMask: {
+        width: tileWidth,
+        height: tileWidth,
+        position: 'absolute',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    categoryImage: {
+        width: tileWidth,
+        height: tileWidth,
     },
     categoryIcon: {
-        width: 70,
-        height: 70,
-        backgroundColor: colors.gray,
+        width: tileWidth,
+        height: tileWidth,
+        backgroundColor: colors.lightGray,
         alignItems: 'center',
         justifyContent: 'center',
     },
     categoryName: {
-        fontSize: 16,
-        color: colors.black,
-        flex: 1,
-        marginLeft: 10,
-        marginRight: 10,
+        fontSize: 22,
+        color: colors.white,
     },
 });
 

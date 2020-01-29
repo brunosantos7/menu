@@ -15,9 +15,9 @@ const headerStyle = {
 };
 
 const headerTitleStyle = {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'OpenSans-Regular',
-    color: colors.primary,
+    color: colors.black,
 };
 
 const defaultNavigationOptions = {
@@ -29,7 +29,7 @@ const AuthLoadingNavigator = createStackNavigator(
     {
         LoadingPage: {
             screen: LoadingPage,
-            navigationOptions: (navigation) => ({
+            navigationOptions: () => ({
                 header: () => <></>
             }),
         }
@@ -45,8 +45,7 @@ const AppNavigator = createStackNavigator(
     {
         Home: {
             screen: Home,
-            navigationOptions: (navigation) => ({
-                // title: navigation.navigation.getParam('title', 'Menu'),
+            navigationOptions: () => ({
                 header: () => <></>,
             }),
         },
