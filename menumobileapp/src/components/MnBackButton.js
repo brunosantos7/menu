@@ -20,7 +20,7 @@ const MnBackButton = ({ navigation, style }) => {
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 20
+        marginLeft: 10
     }
 })
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import MnText from '../components/MnText';
 
@@ -10,30 +10,7 @@ const ProductTile = ({ item, onPressItem }) => {
     );
 };
 
-const ProductList = ({ navigation }) => {
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        const items = [];
-
-        for (let i = 1; i <= 5; i++) {
-            const item = {
-                id: i,
-                name: 'Product ' + i,
-            };
-
-            items.push(item);
-        }
-
-        setProducts(items);
-    }, []);
-
-    function onPressProduct(product) {
-        navigation.navigate('ProductDetail', {
-            product: product,
-        });
-    }
-
+const ProductList = ({ products }) => {
     return (
         <FlatList
             contentContainerStyle={styles.container}
@@ -41,9 +18,6 @@ const ProductList = ({ navigation }) => {
             renderItem={({ item }) => (
                 <ProductTile
                     item={item}
-                    onPressItem={() => {
-                        onPressProduct(item);
-                    }}
                 />
             )}
             keyExtractor={item => item.id.toString()}

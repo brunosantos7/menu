@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
     View,
+    ScrollView,
     Image,
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    Dimensions,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
-    faUtensils,
     faPhoneAlt,
     faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,63 +16,46 @@ import MnText from '../components/MnText';
 import { colors } from '../constants';
 import MenuService from '../services/MenuService';
 import RestaurantService from '../services/RestaurantService';
+import CategoryService from '../services/CategoryService';
 
-const tileWidth = (Math.round(Dimensions.get('window').width) - 45) / 2;
-
-const RestaurantHeader = ({ restaurant }) => {
+const ProductItem = ({ product }) => {
     return (
-        <View style={styles.header}>
-            {restaurant.uri && <Image style={styles.image} source={{ uri: restaurant.uri }} />}
-            <View style={styles.details}>
-                <MnText bold style={styles.title}>Sobre</MnText>
-                <View style={styles.detailRow}>
-                    <FontAwesomeIcon icon={faMapMarkerAlt} size={20} color={colors.black} />
-                    <View style={{marginLeft: 10}}>
-                        <MnText style={styles.subtitle}>{restaurant.street + ', ' + restaurant.number}</MnText>
-                        <MnText style={styles.subtitle}>{restaurant.neighborhood + ' - ' + restaurant.city + '/' + restaurant.state}</MnText>
-                    </View>
-                </View>
-                <View style={styles.detailRow}>
-                    <FontAwesomeIcon icon={faPhoneAlt} size={20} color={colors.black} />
-                    <View style={{marginLeft: 10}}>
-                        <MnText style={styles.subtitle}>{restaurant.phone}</MnText>
-                    </View>
-                </View>
+        <TouchableOpacity style={styles.product} activeOpacity={0.6}>
+            {product.imageUri && (
+                <Image 
+                    style={styles.productImage} 
+                    source={{ uri: product.imageUri }} 
+                />
+            )}
+            <View style={styles.productDetails}>
+                <MnText style={styles.productName}>{product.name}</MnText>
+                <MnText light>{product.description}</MnText>
+                <MnText light style={styles.productPrice}>R$ 20,00</MnText>
             </View>
-        </View>
+            
+        </TouchableOpacity>
     );
 };
 
-const CategoryItemImage = ({ category }) => {
-    if (category.imageUri) {
-        return (
-            <Image 
-                style={styles.categoryImage} 
-                source={{ uri: category.imageUri }} 
-            />
-        );
+const CategoryItem = ({ category, selected, onPressCategory }) => {
+    function getBackgroundColor() {
+        return {
+            backgroundColor: selected ? colors.primary : colors.lightGray,
+        };
+    }
+
+    function getTextStyle() {
+        return {
+            color: selected ? colors.white : colors.black,
+        }
     }
 
     return (
-        <FontAwesomeIcon
-            icon={faUtensils}
-            size={80}
-            color={colors.white}
-        />
-    );
-};
-
-const CategoryItem = ({ category }) => {
-    return (
-        <TouchableOpacity style={styles.category} activeOpacity={0.6}>
-            <View style={styles.categoryIcon}>
-                <CategoryItemImage category={category} />
-            </View>
-            <View style={styles.categoryMask}>
-                <MnText light style={styles.categoryName}>
-                    {category.name}
-                </MnText>
-            </View>
+        <TouchableOpacity 
+            style={[styles.categoryItem, getBackgroundColor()]} 
+            onPress={() => onPressCategory(category)}
+        >
+            <MnText style={getTextStyle()}>{category.name}</MnText>
         </TouchableOpacity>
     );
 };
@@ -81,6 +63,9 @@ const CategoryItem = ({ category }) => {
 const Restaurant = ({ navigation }) => {
     const [restaurant, setRestaurant] = useState({});
     const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
     useEffect(() => {
         const restaurant = navigation.getParam('restaurant', {});
@@ -92,6 +77,12 @@ const Restaurant = ({ navigation }) => {
             getCategories();
         }
     }, [restaurant]);
+
+    useEffect(() => {
+        if (selectedCategory && selectedCategory.id > 0) {
+            getProducts(selectedCategory.id);
+        }
+    }, [selectedCategory]);
 
     async function getCategories() {
         const menus = await RestaurantService.getMenus(restaurant.id).catch(
@@ -106,27 +97,91 @@ const Restaurant = ({ navigation }) => {
             ).catch(error => {
                 console.log(error);
             });
+            
             setCategories(categories);
+
+            if (categories.length > 0) {
+                setSelectedCategory(categories[0]);
+            }
         }
     }
 
+    async function getProducts(categoryId) {
+        setIsLoadingProducts(true);
+
+        const products = await CategoryService.getProducts(categoryId).catch(
+            error => {
+                console.log(error);
+            }
+        )
+
+        setIsLoadingProducts(false);
+        setProducts(products);
+    }
+
+    function onSelectCategory(category) {
+        setSelectedCategory(category);
+    }
+
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={categories}
-                numColumns={2}
-                renderItem={({ item }) => <CategoryItem category={item} />}
-                keyExtractor={item => item.id.toString()}
-                columnWrapperStyle={styles.listColumnWrapper}
-                ListHeaderComponent={() => (
-                    <RestaurantHeader restaurant={restaurant} />
+        <ScrollView style={styles.container}>
+            <View style={styles.header}>
+                {restaurant.uri && <Image style={styles.image} source={{ uri: restaurant.uri }} />}
+                <View style={styles.details}>
+                    <MnText bold style={styles.title}>Sobre</MnText>
+                    <View style={styles.detailRow}>
+                        <FontAwesomeIcon icon={faMapMarkerAlt} size={20} color={colors.black} />
+                        <View style={{marginLeft: 10}}>
+                            <MnText style={styles.subtitle}>{restaurant.street + ', ' + restaurant.number}</MnText>
+                            <MnText style={styles.subtitle}>{restaurant.neighborhood + ' - ' + restaurant.city + '/' + restaurant.state}</MnText>
+                        </View>
+                    </View>
+                    <View style={styles.detailRow}>
+                        <FontAwesomeIcon icon={faPhoneAlt} size={20} color={colors.black} />
+                        <View style={{marginLeft: 10}}>
+                            <MnText style={styles.subtitle}>{restaurant.phone}</MnText>
+                        </View>
+                    </View>
+                </View>
+            </View>
+
+            {categories.length > 0 && (
+                <View style={styles.categoryList}>
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        data={categories}
+                        horizontal={true}
+                        renderItem={({ item }) => {
+                            let selected = false;
+
+                            if (selectedCategory && selectedCategory.id == item.id) {
+                                selected = true;
+                            }
+
+                            return <CategoryItem 
+                                category={item} 
+                                selected={selected}
+                                onPressCategory={(category) => {
+                                    onSelectCategory(category);
+                                }} 
+                            />
+                        }}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </View>
+            )}
+
+            <View style={styles.productList}>
+                {(!isLoadingProducts && products.length == 0) && (
+                    <View style={styles.noProducts}>
+                        <MnText>Nenhum produto encontrado!</MnText>
+                    </View>
                 )}
-                ListHeaderComponentStyle={styles.listHeaderStyle}
-                // ListFooterComponent={() => (
-                //     <View style={{height: 15, backgroundColor: colors.white}} />
-                // )}
-            />
-        </View>
+                {products.length > 0 && products.map(product => (
+                    <ProductItem product={product} key={product.id.toString()} />
+                ))}
+            </View>
+        </ScrollView>
     );
 };
 
@@ -140,12 +195,10 @@ const styles = StyleSheet.create({
     image: {
         height: 220,
         width: '100%',
-        flex: 1,
         resizeMode: 'cover',
     },
     details: {
         marginTop: 10,
-        flex: 1,
         backgroundColor: colors.white,
         paddingHorizontal: 10,
         paddingVertical: 15,
@@ -178,44 +231,51 @@ const styles = StyleSheet.create({
         color: colors.white,
         marginLeft: 10,
     },
-    listHeaderStyle: {
-        marginBottom: 10,
-    },
-    listColumnWrapper: {
-        justifyContent: 'space-between',
+    categoryList: {
+        marginTop: 10,
         backgroundColor: colors.white,
-        paddingHorizontal: 15,
-        paddingTop: 15,
     },
-    category: {
+    categoryItem: {
+        marginVertical: 10,
+        marginHorizontal: 5,
+        backgroundColor: colors.lightGray,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        borderRadius: 30,
+    },
+    noProducts: {
+        paddingVertical: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.white,
+    },
+    productList: {
+        marginTop: 10,
+    },
+    product: {
+        paddingHorizontal: 10,
+        paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: tileWidth,
+        backgroundColor: colors.white,
+        marginBottom: 10,
     },
-    categoryMask: {
-        width: tileWidth,
-        height: tileWidth,
-        position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        alignItems: 'center',
-        justifyContent: 'center',
+    productImage: {
+        width: 50,
+        height: 50,
     },
-    categoryImage: {
-        width: tileWidth,
-        height: tileWidth,
+    productDetails: {
+        flex: 1,
+        marginLeft: 10,
     },
-    categoryIcon: {
-        width: tileWidth,
-        height: tileWidth,
-        backgroundColor: colors.lightGray,
-        alignItems: 'center',
-        justifyContent: 'center',
+    productName: {
+        fontSize: 16,
     },
-    categoryName: {
-        fontSize: 22,
-        color: colors.white,
-    },
+    productPrice: {
+        color: colors.primary,
+        fontSize: 14,
+    }
 });
 
 export default Restaurant;
