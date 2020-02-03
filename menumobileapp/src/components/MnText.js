@@ -8,12 +8,12 @@ const MnText = props => {
         } else if (props.bold) {
             return styles.bold;
         } else if (props.light) {
-            return styles.light
+            return styles.light;
         }
         return styles.regular;
     }
 
-    return <Text {...props} style={[setFontFamily(), props.style]}></Text>;
+    return <Text {...props} style={[setFontFamily(), props.style]} />;
 };
 
 const styles = StyleSheet.create({

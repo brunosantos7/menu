@@ -19,7 +19,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 		error.setError(ex.getMessage());
 
 		error.setTimestamp(LocalDateTime.now());
-		error.setError("Parece que esse restaurante nao e seu.");
+		error.setError("Parece que voce nao tem acesso a este recurso.");
 		error.setStatus(HttpStatus.UNAUTHORIZED.value());
 		
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);

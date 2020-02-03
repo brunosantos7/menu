@@ -1,5 +1,6 @@
 package br.com.menu.menudigital.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.management.BadAttributeValueExpException;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import br.com.menu.menudigital.restaurant.Restaurant;
+import javassist.NotFoundException;
 
 @Controller
 @RequestMapping("/user")
@@ -44,5 +48,11 @@ public class UserController {
 	@GetMapping("/{id}")
 	public @ResponseBody Optional<User> findUserById(@PathVariable Long id) {
 		return userRepository.findById(id);
+	}
+	
+	@GetMapping("/{id}/restaurants")
+	public @ResponseBody List<Restaurant> findRestaurantsByUserId(@PathVariable Long id) throws NotFoundException {
+		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
+		return user.getRestaurants();
 	}
 }
