@@ -31,4 +31,16 @@ public class UserAspect {
 		}
 	}
 	
+	@Before("execution(* br.com.menu.menudigital.user.UserController.findRestaurantsByUserId(..))")
+	public void findRestaurantsByUserId(JoinPoint joinPoint) throws UnauthorizedModifyingException {
+		Object[] args = joinPoint.getArgs();
+
+		Long userId = ((Long) args[0]);
+		User user = tokenUtils.getUserOnJwsToken();
+
+		if (!user.getId().equals(userId)) {
+			throw new UnauthorizedModifyingException();
+		}
+	}
+	
 }
