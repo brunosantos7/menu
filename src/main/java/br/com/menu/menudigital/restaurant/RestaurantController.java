@@ -68,7 +68,7 @@ public class RestaurantController {
 	
 	@PostMapping
 	public @ResponseBody Restaurant save(@Valid RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) throws IOException {
-		User user = userRepository.findByUsername(principal.getName());
+		User user = userRepository.findByEmail(principal.getName());
 		
 		Restaurant newRes = restaurantRepository.save(newRestaurantDTO.toRestaurantEntity());
 		

@@ -43,9 +43,9 @@ public class JWTBasicAuthenticationFilter extends BasicAuthenticationFilter {
 			String jwt = token.getValue();
 
 			DecodedJWT decodedJwt = JWT.require(Algorithm.HMAC256("thesecret")).build().verify(jwt);
-			String username = decodedJwt.getClaim("username").asString();
+			String email = decodedJwt.getClaim("email").asString();
 
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username,
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email,
 					null, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 

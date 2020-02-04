@@ -111,9 +111,10 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(100) NULL,
   `password` VARCHAR(100) NOT NULL,
   `user_type` INT(11) NOT NULL,
+  `email` VARCHAR(80) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
@@ -159,6 +160,23 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user_has_restaurant` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `menudb`.`reset_password_request`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `menudb`.`reset_password_request` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `expiration_time` DATETIME NOT NULL,
+  `user_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_reset_password_request_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_reset_password_request_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `menudb`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

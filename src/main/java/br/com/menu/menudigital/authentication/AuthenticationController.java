@@ -16,26 +16,64 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import br.com.menu.menudigital.user.User;
+import br.com.menu.menudigital.user.UserRepository;
+
 @Controller
 @RequestMapping("/authenticate")
 public class AuthenticationController {
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	private UserRepository userRepository;
+
+	public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository) {
+		super();
+		this.authenticationManager = authenticationManager;
+		this.userRepository = userRepository;
+	}
+
 	@PostMapping
 	public @ResponseBody String authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
-		
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-		} catch (BadCredentialsException e) {
-			throw new BadCredentialsException("Usuario e senha incorretos!", e);
+
+		/// AUTENTICA COM USERNAME
+		if (authenticationRequest.getUsername() != null) {
+			try {
+				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+						authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+			} catch (BadCredentialsException e) {
+				throw new BadCredentialsException("Usuario e senha incorretos!", e);
+			}
+
+			User user = userRepository.findByUsername(authenticationRequest.getUsername());
+
+			return generateTokenWithExpirationTime(user.getEmail());
 		}
-		
-		long nowMillis = System.currentTimeMillis();
-	    Date now = new Date(nowMillis);
-	    			
-		return JWT.create().withClaim("username", authenticationRequest.getUsername()).withIssuedAt(now).withExpiresAt(new Date(nowMillis + TimeUnit.DAYS.toMillis(1))).sign(Algorithm.HMAC256("thesecret"));
+
+		/// AUTENTICA COM EMAIL
+		if (authenticationRequest.getEmail() != null) {
+			try {
+				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+						authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+			} catch (BadCredentialsException e) {
+				throw new BadCredentialsException("Email e senha incorretos!", e);
+			}
+
+			User user = userRepository.findByEmail(authenticationRequest.getEmail());
+
+			return generateTokenWithExpirationTime(user.getEmail());
+		}
+
+		throw new BadCredentialsException("Nao foi possivel autenticar!");
 	}
-	
+
+	private String generateTokenWithExpirationTime(String userEmail) {
+		long nowMillis = System.currentTimeMillis();
+		Date now = new Date(nowMillis);
+
+		return JWT.create().withClaim("email", userEmail).withIssuedAt(now)
+				.withExpiresAt(new Date(nowMillis + TimeUnit.DAYS.toMillis(1))).sign(Algorithm.HMAC256("thesecret"));
+	}
+
 }

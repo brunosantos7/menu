@@ -21,6 +21,7 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String username;
+	private String email;
 	
 	@JsonIgnore
 	private String password;
@@ -61,5 +62,11 @@ public class User {
 	}
 	public void setRestaurants(List<Restaurant> restaurants) {
 		this.restaurants = restaurants;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

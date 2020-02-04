@@ -10,4 +10,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.restaurants WHERE u.username = :username")
 	User findByUsernameWithRestaurants(String username);
 
+	User findByEmail(String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.restaurants WHERE u.email = :email")
+	User findByEmailWithRestaurants(String email);
+
  }

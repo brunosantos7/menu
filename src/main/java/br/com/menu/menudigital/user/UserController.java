@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.management.BadAttributeValueExpException;
+import javax.validation.Valid;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -32,11 +33,19 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public @ResponseBody User saveUser(@RequestBody UserDTO userDto) throws BadAttributeValueExpException {
-		User user = userRepository.findByUsername(userDto.getUsername());
+	public @ResponseBody User saveUser(@RequestBody @Valid UserDTO userDto) throws BadAttributeValueExpException {
+		User user = userRepository.findByEmail(userDto.getEmail());
 		
 		if(user != null) {
-			throw new BadAttributeValueExpException("Ja existe um usuario com este username.");
+			throw new BadAttributeValueExpException("Ja existe um usuario com este email.");
+		}
+		
+		if(userDto.getUsername() != null) {
+			user = userRepository.findByUsername(userDto.getUsername());
+			
+			if(user != null) {
+				throw new BadAttributeValueExpException("Ja existe um usuario com este username.");
+			}
 		}
 		
 		String encoded = passwordEncoder.encode(userDto.getPassword());

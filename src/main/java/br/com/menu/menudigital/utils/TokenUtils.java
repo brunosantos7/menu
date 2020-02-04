@@ -33,9 +33,9 @@ public class TokenUtils {
 			}
 		}
 		DecodedJWT decodedJwt = JWT.require(Algorithm.HMAC256("thesecret")).build().verify(jwt);
-		String username = decodedJwt.getClaim("username").asString();
+		String email = decodedJwt.getClaim("email").asString();
 
-		return userRepository.findByUsernameWithRestaurants(username);
+		return userRepository.findByEmailWithRestaurants(email);
 	}
 
 }
