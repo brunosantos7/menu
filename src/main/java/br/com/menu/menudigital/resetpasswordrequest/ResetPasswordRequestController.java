@@ -1,14 +1,20 @@
-package br.com.menu.menudigital.reserpasswordrequest;
+package br.com.menu.menudigital.resetpasswordrequest;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.mail.MessagingException;
-import javax.management.BadAttributeValueExpException;
 
+import org.hashids.Hashids;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,20 +29,84 @@ public class ResetPasswordRequestController {
 	private ResetPasswordRequestRepository passwordRequestRepository;
 	private UserRepository userRepository;
 	private EmailSender emailSender;
+	private PasswordEncoder passwordEncoder;
 	
 	public ResetPasswordRequestController(ResetPasswordRequestRepository passwordRequestRepository,
-			UserRepository userRepository, EmailSender emailSender) {
+			UserRepository userRepository, EmailSender emailSender, PasswordEncoder passwordEncoder) {
 		super();
 		this.passwordRequestRepository = passwordRequestRepository;
 		this.userRepository = userRepository;
 		this.emailSender = emailSender;
+		this.passwordEncoder = passwordEncoder;
+	}
+	
+	@GetMapping("/isValid")
+	public @ResponseBody ResponseEntity<Boolean> isValid(@RequestParam String id) {
+
+		Long resetPasswordRequestId = isValidId(id);
+		
+		if(resetPasswordRequestId == null) {
+			return ResponseEntity.badRequest().body(false);
+		}
+		
+		Optional<ResetPasswordRequest> resetPasswordRequestOp = passwordRequestRepository.findById(resetPasswordRequestId);
+		
+		if(!resetPasswordRequestOp.isPresent()) {
+			return ResponseEntity.badRequest().body(false);
+		}
+		
+		return ResponseEntity.badRequest().body(true);
+	}
+	
+	@PostMapping("/updatePassword")
+	public @ResponseBody ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePassDTO) {
+
+		Long resetPasswordRequestId = isValidId(updatePassDTO.getResetPasswordRequestId());
+		
+		if(resetPasswordRequestId == null) {
+			return ResponseEntity.badRequest().body("Parametros invalidos!");
+		}
+		
+		Optional<ResetPasswordRequest> resetPasswordRequestOp = passwordRequestRepository.findById(resetPasswordRequestId);
+		
+		if(!resetPasswordRequestOp.isPresent()) {
+			return ResponseEntity.badRequest().body("Parametros invalidos!");
+		}
+		
+		LocalDateTime expirationTime = resetPasswordRequestOp.get().getExpirationTime();
+		if(expirationTime.isBefore(LocalDateTime.now())) {
+			return ResponseEntity.badRequest().body("Tempo esgotado! Solicite a recuperacao de senha novamente!");
+		}
+		
+		Optional<User> userOp = userRepository.findById(resetPasswordRequestOp.get().getUserId());
+		
+		if(userOp.isPresent()) {
+			User user = userOp.get();
+			String encoded = passwordEncoder.encode(updatePassDTO.getNewPassword());
+			user.setPassword(encoded);
+			userRepository.save(user);
+		}
+		
+		passwordRequestRepository.delete(resetPasswordRequestOp.get());
+
+		return ResponseEntity.ok("Senha alterada com sucesso!");
+		
+	}
+
+	private Long isValidId(String id) {
+		Hashids hashids = new Hashids("HashingRestPasswrordRequestId");
+		long[] hash = hashids.decode(id);
+		if(hash.length == 0) {
+			return null;
+		}
+		return hash[0];
 	}
 
 	@PostMapping
-	public @ResponseBody void resetPasswordRequest(@RequestBody ResetPasswordRequestDTO resetRequestDTO) throws BadAttributeValueExpException, MessagingException {
+	public @ResponseBody ResponseEntity<String> resetPasswordRequest(@RequestBody ResetPasswordRequestDTO resetRequestDTO) throws MessagingException {
 		User user = userRepository.findByEmail(resetRequestDTO.getEmail());
 		if(user == null) {
-			throw new BadAttributeValueExpException("Nao existe usuario com este email!");
+			return ResponseEntity.badRequest().body("Nao existe usuario com este email");
 		}
 		
 		ResetPasswordRequest resetPassword = new ResetPasswordRequest();
@@ -44,12 +114,15 @@ public class ResetPasswordRequestController {
 		resetPassword.setUserId(user.getId());
 
 		resetPassword = passwordRequestRepository.save(resetPassword);
+
+		
+		Hashids hashids = new Hashids("HashingRestPasswrordRequestId");
+		String hash = hashids.encode(resetPassword.getId());
 		
 		String uriString = ServletUriComponentsBuilder.fromCurrentContextPath()
 			    .path("passwordRecovery")
-			    .queryParam("id", resetPassword.getId())
+			    .queryParam("id", hash)
 			    .toUriString();
-		
 		
 		StringBuilder emailBody = new StringBuilder("<html>\n" + 
 				"<head>\n" + 
@@ -244,6 +317,6 @@ public class ResetPasswordRequestController {
 		
 		
 		emailSender.sendEmail(user.getEmail(), "Recupecacao de senha", emailBody.toString());
-		
+		return ResponseEntity.ok("Email enviado com sucesso!");
 	}
 }

@@ -1,4 +1,4 @@
-package br.com.menu.menudigital.reserpasswordrequest;
+package br.com.menu.menudigital.resetpasswordrequest;
 
 import org.springframework.data.repository.CrudRepository;
 

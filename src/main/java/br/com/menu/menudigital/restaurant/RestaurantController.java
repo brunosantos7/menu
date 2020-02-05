@@ -5,7 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -54,6 +59,15 @@ public class RestaurantController {
 	@GetMapping
 	public @ResponseBody Iterable<Restaurant> getAllRestaurants() {
 		return restaurantRepository.findAll();
+	}
+	
+	@GetMapping("/citiesAndStatesAvailable")
+	public @ResponseBody Map<String, List<CityToStateDTO>> getAllCitiesAvailableByState() {
+		List<CityToStateDTO> stateToCities = restaurantRepository.findAllCitiesAndSateAvailable();
+		
+		return stateToCities.stream()
+				  .collect(Collectors.groupingBy(CityToStateDTO::getState));
+		
 	}
 	
 	@GetMapping("/{id}")

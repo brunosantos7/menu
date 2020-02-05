@@ -1,7 +1,14 @@
 package br.com.menu.menudigital.restaurant;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
+	List<Restaurant> findAll();
+
+	@Query("SELECT new br.com.menu.menudigital.restaurant.CityToStateDTO(r.city, r.state) from Restaurant r GROUP BY r.city, r.state")
+	List<CityToStateDTO> findAllCitiesAndSateAvailable();
 }
