@@ -1,7 +1,6 @@
 package br.com.menu.menudigital.utils;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
@@ -14,31 +13,18 @@ public class CustomErrorResponse {
     private HttpStatus status;
     private String debugMessage;
     private String message;
-    private List<CustomErrorResponse> subErrors;
     
-	public CustomErrorResponse(LocalDateTime timestamp, HttpStatus status, Throwable throwable, String message,
-			List<CustomErrorResponse> subErrors) {
+	public CustomErrorResponse(LocalDateTime timestamp, HttpStatus status, Throwable throwable, String message) {
 		super();
 		this.timestamp = timestamp;
 		this.status = status;
 		this.debugMessage = throwable.getLocalizedMessage();
 		this.message = message;
-		this.subErrors = subErrors;
 		this.timestamp = LocalDateTime.now();
 	}
 	
 	public CustomErrorResponse(HttpStatus status, Throwable throwable, String message) {
 		super();
-		this.status = status;
-		this.debugMessage = throwable.getLocalizedMessage();
-		this.message = message;
-		this.timestamp = LocalDateTime.now();
-	}
-
-
-	public CustomErrorResponse(LocalDateTime timestamp, HttpStatus status, Throwable throwable, String message) {
-		super();
-		this.timestamp = timestamp;
 		this.status = status;
 		this.debugMessage = throwable.getLocalizedMessage();
 		this.message = message;
@@ -90,11 +76,4 @@ public class CustomErrorResponse {
 		this.message = message;
 	}
 
-	public List<CustomErrorResponse> getSubErrors() {
-		return subErrors;
-	}
-
-	public void setSubErrors(List<CustomErrorResponse> subErrors) {
-		this.subErrors = subErrors;
-	}
 }

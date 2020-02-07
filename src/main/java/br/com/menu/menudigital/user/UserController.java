@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.menu.menudigital.restaurant.Restaurant;
-import javassist.NotFoundException;
 
 @Controller
 @RequestMapping("/user")
