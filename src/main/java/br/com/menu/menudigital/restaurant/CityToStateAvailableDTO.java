@@ -1,11 +1,11 @@
 package br.com.menu.menudigital.restaurant;
 
-public class CityToStateDTO {
+public class CityToStateAvailableDTO {
 	
 	private String city;
 	private String state;
 	
-	public CityToStateDTO(String city, String state) {
+	public CityToStateAvailableDTO(String city, String state) {
 		super();
 		this.city = city;
 		this.state = state;

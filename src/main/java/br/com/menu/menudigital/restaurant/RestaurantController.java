@@ -62,10 +62,10 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/citiesAndStatesAvailable")
-	public @ResponseBody Map<String, List<CityToStateDTO>> getAllCitiesAvailableByState() {
-		List<CityToStateDTO> stateToCities = restaurantRepository.findAllCitiesAndSateAvailable();
+	public @ResponseBody Map<String, List<CityToStateAvailableDTO>> getAllCitiesAvailableByState() {
+		List<CityToStateAvailableDTO> stateToCities = restaurantRepository.findAllCitiesAndSateAvailable();
 		
-		return stateToCities.stream().collect(Collectors.groupingBy(CityToStateDTO::getState));
+		return stateToCities.stream().collect(Collectors.groupingBy(CityToStateAvailableDTO::getState));
 		
 	}
 	
@@ -97,7 +97,7 @@ public class RestaurantController {
 		userHasRestaurantRepository.save(relationship);
 		
 		if(file != null) {
-			Path path = Paths.get(String.format("~~~~poasid123?#!P@RLEFSimages/restaurant/%s", newRes.getId()));
+			Path path = Paths.get(String.format("images/restaurant/%s", newRes.getId()));
 			
 	        try {
 				Files.createDirectories(path);
