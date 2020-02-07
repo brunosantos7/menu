@@ -2,8 +2,6 @@ package br.com.menu.menudigital.restaurant;
 
 import java.util.stream.Collectors;
 
-import javax.management.BadAttributeValueExpException;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -37,7 +35,7 @@ public class RestaurantAspect {
 	}
 	
 	@Before("execution (* br.com.menu.menudigital.restaurant.RestaurantController.updateRestaurantImage(..))")
-	public void updateRestaurantImage(JoinPoint joinPoint) throws BadAttributeValueExpException, UnauthorizedModifyingException {
+	public void updateRestaurantImage(JoinPoint joinPoint) throws UnauthorizedModifyingException {
 		Object[] args = joinPoint.getArgs();
 		
 		Long restaurantId = (Long)args[0];
@@ -50,7 +48,7 @@ public class RestaurantAspect {
 	}
 	
 	@Before("execution (* br.com.menu.menudigital.restaurant.RestaurantController.deleteRestaurant(..))")
-	public void delete(JoinPoint joinPoint) throws BadAttributeValueExpException, UnauthorizedModifyingException {
+	public void delete(JoinPoint joinPoint) throws UnauthorizedModifyingException {
 		Object[] args = joinPoint.getArgs();
 		
 		Long restaurantId = (Long)args[0];

@@ -8,4 +8,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
 	List<Product> findByCategoryId(Long id);
 
+	List<Product> findByRestaurantId(Long id);
+
 }

@@ -1,5 +1,8 @@
 package br.com.menu.menudigital.product;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,14 +13,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Product {
+public class Product implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5440267256958735958L;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String description;
+	
+	@Column(name="category_id")
 	private Long categoryId;
+
 	private Long restaurantId;
 
 	@JsonIgnore

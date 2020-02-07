@@ -2,6 +2,8 @@ package br.com.menu.menudigital.menu;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.menu.menudigital.category.Category;
 import br.com.menu.menudigital.category.CategoryRepository;
-import javassist.NotFoundException;
 
 @Controller
 @RequestMapping("/menu")
@@ -31,35 +32,34 @@ public class MenuController {
 	}
 
 	@GetMapping("/{id}")
-	public @ResponseBody Menu getMenuById(@PathVariable Long id) throws NotFoundException {
-		return menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id"));
+	public @ResponseBody Menu getMenuById(@PathVariable Long id) {
+		return menuRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe menu com este id."));
 	}
-	
+
 	@GetMapping("/{id}/categories")
-	public @ResponseBody List<Category> getMenuCategoriesById(@PathVariable Long id) {
+	public @ResponseBody List<Category> getMenuCategoriesByMenuId(@PathVariable Long id) {
 		return categoryRepository.findByMenuId(id);
 	}
-	
+
 	@PostMapping
 	public @ResponseBody Menu save(@RequestBody MenuDTO newMenuDTO) {
 		return menuRepository.save(newMenuDTO.toMenuEntity());
 	}
-	
+
 	@PutMapping("/{id}")
-	public @ResponseBody Menu update(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) throws NotFoundException {
-		Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
-		
+	public @ResponseBody Menu update(@PathVariable Long id, @RequestBody MenuDTO newMenuDTO) {
+		Menu menu = menuRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe menu com este id."));
+
 		menu.setRestaurantId(newMenuDTO.getRestaurantId());
 		menu.setTitle(newMenuDTO.getTitle());
-		
+
 		return menuRepository.save(menu);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public @ResponseBody void delete(@PathVariable("id") Long menuId) throws NotFoundException {
-		Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
+	public @ResponseBody void delete(@PathVariable("id") Long menuId) {
+		Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new EntityNotFoundException("Nao existe menu com este id."));
 		menuRepository.delete(menu);
 	}
-	
-	
+
 }

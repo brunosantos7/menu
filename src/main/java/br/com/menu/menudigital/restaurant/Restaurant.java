@@ -21,7 +21,7 @@ public class Restaurant {
 	private String state;
 	private String cep;
 	private String city;
-	private String number;
+	private Integer number;
 	private String phone;
 	private String email;
 	
@@ -76,10 +76,10 @@ public class Restaurant {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
-	public void setNumber(String number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 	public String getPhone() {

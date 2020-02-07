@@ -17,7 +17,7 @@ public class RestaurantDTO {
 	@NotNull
 	private String city;
 	@NotNull
-	private String number;
+	private Integer number;
 	@NotNull
 	private String phone;
 	private String email;
@@ -58,10 +58,10 @@ public class RestaurantDTO {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
-	public void setNumber(String number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 	public String getPhone() {

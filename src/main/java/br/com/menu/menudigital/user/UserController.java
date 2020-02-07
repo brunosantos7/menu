@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.management.BadAttributeValueExpException;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,8 +61,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/restaurants")
-	public @ResponseBody List<Restaurant> findRestaurantsByUserId(@PathVariable Long id) throws NotFoundException {
-		User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Does not exist menu with this id."));
+	public @ResponseBody List<Restaurant> findRestaurantsByUserId(@PathVariable Long id) {
+		User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe usuario com este id."));
 		return user.getRestaurants();
 	}
 }

@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
+import javax.management.BadAttributeValueExpException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hashids.Hashids;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,23 +60,23 @@ public class ResetPasswordRequestController {
 	}
 	
 	@PostMapping("/updatePassword")
-	public @ResponseBody ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePassDTO) {
+	public @ResponseBody ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePassDTO) throws BadAttributeValueExpException {
 
 		Long resetPasswordRequestId = isValidId(updatePassDTO.getResetPasswordRequestId());
 		
 		if(resetPasswordRequestId == null) {
-			return ResponseEntity.badRequest().body("Parametros invalidos!");
+			throw new BadAttributeValueExpException("Parametros invalidos!");
 		}
 		
 		Optional<ResetPasswordRequest> resetPasswordRequestOp = passwordRequestRepository.findById(resetPasswordRequestId);
 		
 		if(!resetPasswordRequestOp.isPresent()) {
-			return ResponseEntity.badRequest().body("Parametros invalidos!");
+			throw new BadAttributeValueExpException("Parametros invalidos!");
 		}
 		
 		LocalDateTime expirationTime = resetPasswordRequestOp.get().getExpirationTime();
 		if(expirationTime.isBefore(LocalDateTime.now())) {
-			return ResponseEntity.badRequest().body("Tempo esgotado! Solicite a recuperacao de senha novamente!");
+			throw new EntityNotFoundException("Tempo esgotado! Solicite a recuperacao de senha novamente!");
 		}
 		
 		Optional<User> userOp = userRepository.findById(resetPasswordRequestOp.get().getUserId());
@@ -106,7 +107,7 @@ public class ResetPasswordRequestController {
 	public @ResponseBody ResponseEntity<String> resetPasswordRequest(@RequestBody ResetPasswordRequestDTO resetRequestDTO) throws MessagingException {
 		User user = userRepository.findByEmail(resetRequestDTO.getEmail());
 		if(user == null) {
-			return ResponseEntity.badRequest().body("Nao existe usuario com este email");
+			throw new EntityNotFoundException("Nao existe usuario com este email");
 		}
 		
 		ResetPasswordRequest resetPassword = new ResetPasswordRequest();
@@ -316,7 +317,11 @@ public class ResetPasswordRequestController {
 				"");
 		
 		
-		emailSender.sendEmail(user.getEmail(), "Recupecacao de senha", emailBody.toString());
+		try {
+			emailSender.sendEmail(user.getEmail(), "Recupecacao de senha", emailBody.toString());
+		} catch (MessagingException e) {
+			throw new MessagingException("Erro ao enviar o email");
+		}
 		return ResponseEntity.ok("Email enviado com sucesso!");
 	}
 }
