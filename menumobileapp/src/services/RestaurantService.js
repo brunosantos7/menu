@@ -7,6 +7,9 @@ const RestaurantService = {
     getMenus: (restaurantId) => {
         return HttpService.doGet('restaurant/' + restaurantId + '/menus', {}).then(response => response.data);
     },
+    getProducts: (restaurantId) => {
+        return HttpService.doGet('restaurant/' + restaurantId + '/products', {}).then(response => response.data);
+    },
 };
 
 export default RestaurantService;

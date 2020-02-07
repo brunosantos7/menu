@@ -80,43 +80,22 @@ const Restaurant = ({ navigation }) => {
 
     useEffect(() => {
         if (selectedCategory && selectedCategory.id > 0) {
-            getProducts(selectedCategory.id);
+            setProducts(selectedCategory.products);
         }
     }, [selectedCategory]);
 
     async function getCategories() {
-        const menus = await RestaurantService.getMenus(restaurant.id).catch(
-            error => {
-                console.log(error);
-            },
-        );
+        const categories = await RestaurantService.getProducts(
+            restaurant.id,
+        ).catch(error => {
+            console.log(error);
+        });
+        
+        setCategories(categories);
 
-        if (menus.length > 0) {
-            const categories = await MenuService.getCategories(
-                menus[0].id,
-            ).catch(error => {
-                console.log(error);
-            });
-            
-            setCategories(categories);
-
-            if (categories.length > 0) {
-                setSelectedCategory(categories[0]);
-            }
+        if (categories.length > 0) {
+            setSelectedCategory(categories[0]);
         }
-    }
-
-    async function getProducts(categoryId) {
-        setIsLoadingProducts(true);
-
-        const products = await CategoryService.getProducts(categoryId).catch(
-            error => {
-                console.log(error);
-            }
-        )
-
-        setIsLoadingProducts(false);
-        setProducts(products);
     }
 
     function onSelectCategory(category) {
