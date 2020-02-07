@@ -7,6 +7,7 @@ import Restaurant from './pages/Restaurant';
 import CategoryList from './pages/CategoryList';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
+import CityList from './pages/CityList';
 import MnBackButton from './components/MnBackButton';
 import { colors } from './constants';
 
@@ -32,10 +33,23 @@ const AuthLoadingNavigator = createStackNavigator(
             navigationOptions: () => ({
                 header: () => <></>
             }),
-        }
+        },
     },
     {
         initialRouteName: 'LoadingPage',
+        defaultNavigationOptions: defaultNavigationOptions,
+        headerTitleAlign: 'center',
+    },
+);
+
+const CityListNavigator = createStackNavigator(
+    {
+        CityListPage: {
+            screen: CityList,
+        }
+    },
+    {
+        initialRouteName: 'CityListPage',
         defaultNavigationOptions: defaultNavigationOptions,
         headerTitleAlign: 'center',
     },
@@ -89,12 +103,13 @@ const AppRoutes = createAppContainer(
     createSwitchNavigator(
         {
             AuthLoading: AuthLoadingNavigator,
+            CityList: CityListNavigator,
             App: AppNavigator,
         },
         {
           initialRouteName: 'AuthLoading',
         }
-      )
+    )
 );
 
 export default AppRoutes;
