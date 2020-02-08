@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Restaurant from '../restaurant/Restaurant';
-import UserService from '../../services/UserService';
+import React, { useState, useEffect } from "react";
+import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import Restaurant from "../restaurant/Restaurant";
+import UserService from "../../services/UserService";
 
 export default function Dashboard() {
-  const hardCodedUserId = 1;
+  const hardCodedUserId = 2;
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
+    // UserService.authenticate("bruno.santos7@outlook.com", "testando").then(
+    //   response => {
+    //     console.log(response);
+    //   }
+    // );
+
     UserService.getRestaurantsByUserId(hardCodedUserId).then(restaurants => {
       setRestaurants(restaurants);
     });
@@ -30,7 +36,7 @@ export default function Dashboard() {
             xs={12}
             md={8}
             lg={9}
-            style={{ fontSize: 30, color: 'grey' }}
+            style={{ fontSize: 30, color: "grey" }}
           >
             Bem-vindo ao EatUp. Parece que voce nao tem nenhum restaurante
             cadastrado. Nao perca mais tempo e disponibilize o seu cardapio
@@ -39,7 +45,7 @@ export default function Dashboard() {
           <Grid item xs={12} md={8} lg={9}>
             <Link
               to="/restaurant"
-              style={{ textDecoration: 'none', color: 'white' }}
+              style={{ textDecoration: "none", color: "white" }}
             >
               <Button variant="contained" color="primary">
                 Cadastre-se Agora

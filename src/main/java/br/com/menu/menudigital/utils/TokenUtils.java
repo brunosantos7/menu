@@ -1,10 +1,10 @@
 package br.com.menu.menudigital.utils;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -25,13 +25,15 @@ public class TokenUtils {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
 
-		Cookie[] cookies = request.getCookies();
-		String jwt = "";
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("token")) {
-				jwt = cookie.getValue();
-			}
+		String auth = request.getHeader("Authorization");
+		
+		if(auth == null || auth.isEmpty()) {
+			throw new BadCredentialsException("Voce precisa enviar um token");
 		}
+		
+		String[] authrization = auth.split("Bearer ");
+		String jwt = authrization[1];
+		
 		DecodedJWT decodedJwt = JWT.require(Algorithm.HMAC256("thesecret")).build().verify(jwt);
 		String email = decodedJwt.getClaim("email").asString();
 

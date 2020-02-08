@@ -37,8 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
 			.authorizeRequests()
+			.antMatchers(HttpMethod.OPTIONS).permitAll()
+	        .antMatchers("/authenticate").permitAll()
 			.antMatchers(HttpMethod.POST, "/user").permitAll()
-			.antMatchers("/authenticate").permitAll()
 			.antMatchers(HttpMethod.GET).permitAll()
 			.anyRequest().authenticated()
 			.and()
@@ -46,12 +47,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilter(jwtBasicAuthenticationFilter())
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-			.logout().permitAll();
+			.logout().permitAll()
+			.and()
+		    .formLogin().disable();
 		}
 		
 //		@Bean
-//		public JWTUsernamePasswordAuthenticationFilter jwtUsernamePasswordAuthenticationFilter() throws Exception {
-//			JWTUsernamePasswordAuthenticationFilter auth = new JWTUsernamePasswordAuthenticationFilter();
+//		public JWTUsernamePasswordAuthFilter jwtUsernamePasswordAuthenticationFilter() throws Exception {
+//			JWTUsernamePasswordAuthFilter auth = new JWTUsernamePasswordAuthFilter();
 //			auth.setAuthenticationManager(this.authenticationManager());
 //			return auth;
 //		}

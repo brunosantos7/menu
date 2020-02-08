@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.util.WebUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -31,16 +29,17 @@ public class JWTBasicAuthenticationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		Cookie token = WebUtils.getCookie(request, "token");
+		String auth = request.getHeader("Authorization");
 
-		if (token == null) {
+		if (auth == null || auth.isEmpty()) {
 			chain.doFilter(request, response);
 			return;
 		}
 
 		try {
 
-			String jwt = token.getValue();
+			String[] authrization = auth.split("Bearer ");
+			String jwt = authrization[1];
 
 			DecodedJWT decodedJwt = JWT.require(Algorithm.HMAC256("thesecret")).build().verify(jwt);
 			String email = decodedJwt.getClaim("email").asString();
