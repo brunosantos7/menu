@@ -10,6 +10,9 @@ const RestaurantService = {
     getProducts: (restaurantId) => {
         return HttpService.doGet('restaurant/' + restaurantId + '/products', {}).then(response => response.data);
     },
+    getCitiesWithStates: () => {
+        return HttpService.doGet('restaurant/citiesAndStatesAvailable', {}).then(response => response.data);
+    },
 };
 
 export default RestaurantService;

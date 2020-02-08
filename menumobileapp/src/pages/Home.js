@@ -37,6 +37,10 @@ const Home = ({ navigation }) => {
         getRestaurants();
     }
 
+    function onPressChangeCity() {
+        navigation.navigate('CityList');
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -65,7 +69,7 @@ const Home = ({ navigation }) => {
                             <MnText style={styles.headerSubTitle}>
                                 em Araguari/MG
                             </MnText>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={onPressChangeCity}>
                                 <MnText style={styles.headerButton}>
                                     (Trocar cidade)
                                 </MnText>
