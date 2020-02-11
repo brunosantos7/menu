@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { SectionList, Button, StyleSheet, View } from 'react-native';
+import { SectionList, Button, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import MnText from '../components/MnText';
 import { colors } from '../constants';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const CityList = ({ navigation }) => {
     const [datasource, setDatasource] = useState([]);
+    const [city, setCity] = useState(null);
 
     useEffect(() => {
         async function init() {
             try {
                 let cities = await AsyncStorage.getItem('citiesList');
                 cities = JSON.parse(cities);
-                console.log(cities);
                 const datasource = [];
 
                 for (const c in cities) {
@@ -31,15 +33,21 @@ const CityList = ({ navigation }) => {
         init();
     }, []);
 
+    function onSelectCity(city) {
+        setCity(city);
+        navigation.setParams({city: city});
+    }
+
     return (
         <View style={styles.container}>
             <SectionList
                 sections={datasource}
                 keyExtractor={(item, index) => item + index}
                 renderItem={({ item }) => (
-                    <View style={styles.listItem}>
+                    <TouchableOpacity style={styles.listItem} activeOpacity={0.8} onPress={() => onSelectCity(item)}>
                         <MnText style={styles.listItemText}>{item.city}</MnText>
-                    </View>
+                        {(city && item.city == city.city) && <FontAwesomeIcon icon={faCheck} />}
+                    </TouchableOpacity>
                 )}
                 renderSectionHeader={({ section: { title } }) => (
                     <View style={styles.listHeader}>
@@ -55,7 +63,15 @@ CityList.navigationOptions = ({ navigation }) => ({
     title: 'Escolha a Cidade',
     headerLeft: () => <></>,
     headerRight: () => <Button onPress={() => {
-        navigation.navigate('App');
+        const city = navigation.getParam('city', null);
+        
+        if (city) {
+            AsyncStorage.setItem('city', JSON.stringify(city)).then(() => {
+                navigation.navigate('App');
+            });
+        } else {
+            console.log('Escolha a cidade!!!');
+        }
     }} title="OK" />
 });
 
@@ -75,6 +91,9 @@ const styles = StyleSheet.create({
     listItem: {
         padding: 10,
         backgroundColor: colors.white,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     listItemText: {
         fontSize: 16,

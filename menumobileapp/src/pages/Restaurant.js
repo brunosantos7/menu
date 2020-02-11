@@ -14,13 +14,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import MnText from '../components/MnText';
 import { colors } from '../constants';
-import MenuService from '../services/MenuService';
 import RestaurantService from '../services/RestaurantService';
-import CategoryService from '../services/CategoryService';
 
 const ProductItem = ({ product }) => {
     return (
-        <TouchableOpacity style={styles.product} activeOpacity={0.6}>
+        <View style={styles.product}>
             {product.imageUri && (
                 <Image 
                     style={styles.productImage} 
@@ -29,11 +27,11 @@ const ProductItem = ({ product }) => {
             )}
             <View style={styles.productDetails}>
                 <MnText style={styles.productName}>{product.name}</MnText>
-                <MnText light>{product.description}</MnText>
+                <MnText light style={styles.productDescription}>{product.description}</MnText>
                 <MnText light style={styles.productPrice}>R$ 20,00</MnText>
             </View>
             
-        </TouchableOpacity>
+        </View>
     );
 };
 
@@ -65,7 +63,6 @@ const Restaurant = ({ navigation }) => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [products, setProducts] = useState([]);
-    const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
     useEffect(() => {
         const restaurant = navigation.getParam('restaurant', {});
@@ -151,7 +148,7 @@ const Restaurant = ({ navigation }) => {
             )}
 
             <View style={styles.productList}>
-                {(!isLoadingProducts && products.length == 0) && (
+                {(products.length == 0) && (
                     <View style={styles.noProducts}>
                         <MnText>Nenhum produto encontrado!</MnText>
                     </View>
@@ -229,7 +226,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
     productList: {
-        marginTop: 10,
+        
     },
     product: {
         paddingHorizontal: 10,
@@ -238,7 +235,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: colors.white,
-        marginBottom: 10,
     },
     productImage: {
         width: 50,
@@ -249,11 +245,14 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     productName: {
-        fontSize: 16,
+        fontSize: 14,
+    },
+    productDescription: {
+        fontSize: 12,
     },
     productPrice: {
         color: colors.primary,
-        fontSize: 14,
+        fontSize: 12,
     }
 });
 

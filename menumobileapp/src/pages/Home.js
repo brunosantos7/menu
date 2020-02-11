@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
     FlatList,
     StyleSheet,
@@ -16,10 +17,15 @@ import InputSearch from '../components/InputSearch';
 
 const Home = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
+    const [city, setCity] = useState(null);
 
     useEffect(() => {
-        getRestaurants();
+        getCity();
     }, []);
+
+    useEffect(() => {
+        getRestaurants(null);
+    }, [city]);
 
     function onPressRestaurant(restaurant) {
         navigation.navigate('Restaurant', {
@@ -28,13 +34,30 @@ const Home = ({ navigation }) => {
         });
     }
 
-    async function getRestaurants() {
-        const items = await RestaurantService.getRestaurants();
+    async function getCity() {
+        const city = await AsyncStorage.getItem('city');
+        setCity(JSON.parse(city));
+    }
+
+    async function getRestaurants(searchText) {
+        if (!city) {
+            return;
+        }
+
+        const params = {
+            city: city.city
+        };
+
+        if (searchText) {
+            params.name = searchText;
+        }
+
+        const items = await RestaurantService.getRestaurants(params);
         setRestaurants(items);
     }
 
     function onSubmitSearch(searchText) {
-        getRestaurants();
+        getRestaurants(searchText);
     }
 
     function onPressChangeCity() {
@@ -65,16 +88,24 @@ const Home = ({ navigation }) => {
                         </View>
 
                         <MnText bold style={styles.headerTitle}>Restaurantes</MnText>
-                        <View style={styles.headerCity}>
+                        {city && <View style={styles.headerCity}>
                             <MnText style={styles.headerSubTitle}>
-                                em Araguari/MG
+                                em {city.city}/{city.state}
                             </MnText>
                             <TouchableOpacity onPress={onPressChangeCity}>
                                 <MnText style={styles.headerButton}>
                                     (Trocar cidade)
                                 </MnText>
                             </TouchableOpacity>
-                        </View>
+                        </View>}
+
+                        {!city && <View style={styles.headerCity}>
+                            <TouchableOpacity onPress={onPressChangeCity}>
+                                <MnText style={styles.headerButton}>
+                                    Escolher Cidade
+                                </MnText>
+                            </TouchableOpacity>
+                        </View>}
                     </View>
                 )}
             />
