@@ -9,15 +9,11 @@ public class UserDTO  {
 	private String email;
 	@NotNull
 	private String password;
+	@NotNull
 	private Integer userType;
-	private Long restaurantId;
+	@NotNull
+	private Long premiumTypeId;
 	
-	public UserDTO(String username, String password) {
-		super();
-		this.username = username;
-		this.password = password;
-	}
-
 	public String getUsername() {
 		return username;
 	}
@@ -41,20 +37,19 @@ public class UserDTO  {
 	public void setUserType(Integer userType) {
 		this.userType = userType;
 	}
-
-	public Long getRestaurantId() {
-		return restaurantId;
-	}
-
-	public void setRestaurantId(Long restaurantId) {
-		this.restaurantId = restaurantId;
-	}
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Long getPremiumTypeId() {
+		return premiumTypeId;
+	}
+
+	public void setPremiumTypeId(Long premiumTypeId) {
+		this.premiumTypeId = premiumTypeId;
 	}
 
 	public User toEntity() {
@@ -63,6 +58,7 @@ public class UserDTO  {
 		user.setUserType(this.getUserType());
 		user.setUsername(this.getUsername());
 		user.setEmail(this.getEmail());
+		user.setPremiumTypeId(this.premiumTypeId);
 		
 		return user;
 	}

@@ -22,13 +22,15 @@ import br.com.menu.menudigital.category.CategoryRepository;
 public class MenuController {
 
 	private MenuRepository menuRepository;
-
 	private CategoryRepository categoryRepository;
+	private MenuService menuService;
 
-	public MenuController(MenuRepository menuRepository, CategoryRepository categoryRepository) {
+	public MenuController(MenuRepository menuRepository, CategoryRepository categoryRepository,
+			MenuService menuService) {
 		super();
 		this.menuRepository = menuRepository;
 		this.categoryRepository = categoryRepository;
+		this.menuService = menuService;
 	}
 
 	@GetMapping("/{id}")
@@ -59,7 +61,7 @@ public class MenuController {
 	@DeleteMapping("/{id}")
 	public @ResponseBody void delete(@PathVariable("id") Long menuId) {
 		Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new EntityNotFoundException("Nao existe menu com este id."));
-		menuRepository.delete(menu);
+		menuService.softDeleteMenu(menu);
 	}
 
 }

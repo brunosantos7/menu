@@ -12,20 +12,24 @@ import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.menu.menudigital.interfaces.SoftDeleteClass;
 import br.com.menu.menudigital.restaurant.Restaurant;
 
 @Entity
-public class User {
+public class User implements SoftDeleteClass {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String username;
 	private String email;
+	private Long premiumTypeId;
 	
 	@JsonIgnore
 	private String password;
 	private Integer userType;
+	
+	private boolean deleted;
 
 	@ManyToMany
 	@JoinTable(name="userHasRestaurant",
@@ -68,5 +72,18 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Long getPremiumTypeId() {
+		return premiumTypeId;
+	}
+	public void setPremiumTypeId(Long premiumTypeId) {
+		this.premiumTypeId = premiumTypeId;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	@Override
+	public boolean isDeleted() {
+		return this.deleted;
 	}
 }

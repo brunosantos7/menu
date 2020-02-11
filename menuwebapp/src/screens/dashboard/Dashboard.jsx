@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import NoRecordsFound from '../../components/NoRecordsFound';
-import Restaurant from '../restaurant/Restaurant';
-import UserService from '../../services/UserService';
+import React, { useState, useEffect } from "react";
+import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import NoRecordsFound from "../../components/NoRecordsFound";
+import Restaurant from "../restaurant/Restaurant";
+import UserService from "../../services/UserService";
 
 export default function Dashboard() {
-  const hardCodedUserId = 1;
+  const hardCodedUserId = 2;
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {

@@ -12,6 +12,8 @@ public class ProductDTO {
 	private Long categoryId;
 	@NotNull
 	private Long restaurantId;
+	@NotNull
+	private Double price;
 	
 	public String getName() {
 		return name;
@@ -37,6 +39,12 @@ public class ProductDTO {
 	public void setRestaurantId(Long restaurantId) {
 		this.restaurantId = restaurantId;
 	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
 	public Product toEntity() {
 		Product product = new Product();
 		
@@ -44,6 +52,7 @@ public class ProductDTO {
 		product.setDescription(this.getDescription());
 		product.setName(this.getName());
 		product.setRestaurantId(this.getRestaurantId());
+		product.setPrice(this.getPrice());
 		return product;
 	}
 }

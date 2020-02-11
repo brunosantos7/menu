@@ -27,12 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
 	
 	private ProductRepository productRepository;
+	private ProductService productService;
 	
-	public ProductController(ProductRepository productRepository) {
+	public ProductController(ProductRepository productRepository, ProductService productService) {
 		super();
 		this.productRepository = productRepository;
+		this.productService = productService;
 	}
-	
+
 	@GetMapping("/{id}")
 	public @ResponseBody Optional<Product> save(@PathVariable Long id) {
 		return productRepository.findById(id);
@@ -47,7 +49,6 @@ public class ProductController {
 			
 	        try {
 				Files.createDirectories(path);
-			
 	        
 		        String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		        
@@ -112,10 +113,10 @@ public class ProductController {
 	public @ResponseBody void deleteProduct(@PathVariable Long id)  {
 		Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe produto com este id."));
 
-		Path path = Paths.get(String.format("images/product/%s", product.getId())); 
-        FileSystemUtils.deleteRecursively(path.toFile());
+//		Path path = Paths.get(String.format("images/product/%s", product.getId())); 
+//        FileSystemUtils.deleteRecursively(path.toFile());
         
-		productRepository.delete(product);
+		productService.softDeleteProduct(product);
 	}
 
 

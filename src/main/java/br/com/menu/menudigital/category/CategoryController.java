@@ -31,15 +31,17 @@ import br.com.menu.menudigital.product.ProductRepository;
 public class CategoryController {
 	
 	private CategoryRepository categoryRepository;
-	
 	private ProductRepository productRepository;
+	private CategoryService categoryService;
 	
-	public CategoryController(CategoryRepository categoryRepository, ProductRepository productRepository) {
+	public CategoryController(CategoryRepository categoryRepository, ProductRepository productRepository,
+			CategoryService categoryService) {
 		super();
 		this.categoryRepository = categoryRepository;
 		this.productRepository = productRepository;
+		this.categoryService = categoryService;
 	}
-	
+
 	@GetMapping("/{id}/products")
 	public @ResponseBody List<Product> getProductsByCategory(@PathVariable Long id){
 		return this.productRepository.findByCategoryId(id);
@@ -112,9 +114,9 @@ public class CategoryController {
 	public @ResponseBody void delete(@PathVariable Long id)  {
 		Category category = categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe categoria com este id."));
 		
-		Path path = Paths.get(String.format("images/category/%s", category.getId()));
-		FileSystemUtils.deleteRecursively(path.toFile());
+//		Path path = Paths.get(String.format("images/category/%s", category.getId()));
+//		FileSystemUtils.deleteRecursively(path.toFile());
 		
-		categoryRepository.delete(category);
+		categoryService.softDeleteCategory(category);
 	}
 }

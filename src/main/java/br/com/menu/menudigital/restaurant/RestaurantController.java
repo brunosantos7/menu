@@ -44,16 +44,18 @@ public class RestaurantController {
 	private UserHasRestaurantRepository userHasRestaurantRepository;
 	private MenuRepository menuRepository;
 	private CategoryRepository categoryRepository;
+	private RestaurantService restaurantService;
 
 	public RestaurantController(RestaurantRepository restaurantRepository, UserRepository userRepository,
 			UserHasRestaurantRepository userHasRestaurantRepository, MenuRepository menuRepository,
-			CategoryRepository categoryRepository) {
+			CategoryRepository categoryRepository, RestaurantService restaurantService) {
 		super();
 		this.restaurantRepository = restaurantRepository;
 		this.userRepository = userRepository;
 		this.userHasRestaurantRepository = userHasRestaurantRepository;
 		this.menuRepository = menuRepository;
 		this.categoryRepository = categoryRepository;
+		this.restaurantService = restaurantService;
 	}
 
 	@GetMapping
@@ -163,13 +165,6 @@ public class RestaurantController {
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteRestaurant(@PathVariable("id") Long restaurantId) throws NotFoundException {
 		Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
-		
-		Path path = Paths.get(String.format("images/restaurant/%s", restaurant.getId()));
-		FileSystemUtils.deleteRecursively(path.toFile());
-		
-		List<UserHasRestaurant> listRelationship = userHasRestaurantRepository.findByRestaurantId(restaurant.getId());
-		userHasRestaurantRepository.deleteAll(listRelationship);
-		
-		restaurantRepository.delete(restaurant);
+		restaurantService.softDeleteRestaurant(restaurant);
 	}
 }

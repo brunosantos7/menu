@@ -1,6 +1,5 @@
 package br.com.menu.menudigital.category;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -14,15 +13,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.menu.menudigital.interfaces.SoftDeleteClass;
 import br.com.menu.menudigital.product.Product;
 
 @Entity
-public class Category implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8336061158357558526L;
+public class Category implements SoftDeleteClass {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +26,8 @@ public class Category implements Serializable {
 	private Long menuId;
 
 	@JsonIgnore
+	private boolean deleted;
+	@JsonIgnore
 	private Long restaurantId;
 	@JsonIgnore
 	private String imagePath;
@@ -38,10 +35,6 @@ public class Category implements Serializable {
 	@OneToMany
     @JoinColumn(name = "category_id")
 	private List<Product> products;
-
-//	@OneToMany
-//	@JoinColumn(name="categoryId", referencedColumnName="id")
-//	private List<Product> products;
 
 	public Long getId() {
 		return id;
@@ -90,15 +83,22 @@ public class Category implements Serializable {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+	
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public String getImageUri() {
 		if (this.imagePath != null) {
 			return ServletUriComponentsBuilder.fromCurrentContextPath()
 					.path(String.format("images/category/%s", this.id)).toUriString();
 		}
-
 		return null;
+	}
 
+	@Override
+	public boolean isDeleted() {
+		return this.deleted;
 	}
 
 }

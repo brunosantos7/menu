@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `menudb`.`restaurant` (
   `number` INT(10) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `image_path` VARCHAR(100) NULL,
+  `deleted` INT(1) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -42,8 +43,9 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `menudb`.`menu` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(100) NULL DEFAULT NULL,
-  `restaurant_id` INT(11) NULL,
+  `title` VARCHAR(100) NOT NULL,
+  `restaurant_id` INT(11) NOT NULL,
+  `deleted` INT(1) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_menu_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
   CONSTRAINT `fk_menu_restaurant1`
@@ -65,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `menudb`.`category` (
   `image_path` VARCHAR(255) NULL DEFAULT NULL,
   `menu_id` INT(11) NOT NULL,
   `restaurant_id` INT(11) NOT NULL,
+  `deleted` INT(1) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_category_menu1_idx` (`menu_id` ASC) VISIBLE,
   INDEX `fk_category_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
@@ -87,10 +90,12 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `menudb`.`product` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `description` VARCHAR(45) NULL DEFAULT NULL,
+  `description` VARCHAR(350) NULL DEFAULT NULL,
   `category_id` INT(11) NOT NULL,
   `image_path` VARCHAR(255) NULL,
-  `restaurant_id` INT(11) NOT NULL,
+  `restaurant_id` INT(1) NOT NULL,
+  `price` DOUBLE(10,2) NOT NULL,
+  `deleted` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_product_category1_idx` (`category_id` ASC) VISIBLE,
   INDEX `fk_product_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
@@ -115,6 +120,8 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user` (
   `password` VARCHAR(100) NOT NULL,
   `user_type` INT(11) NOT NULL,
   `email` VARCHAR(80) NOT NULL,
+  `premium_type_id` INT(1) NOT NULL,
+  `deleted` INT(1) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
@@ -145,6 +152,7 @@ CREATE TABLE IF NOT EXISTS `menudb`.`user_has_restaurant` (
   `user_id` INT(11) NOT NULL,
   `restaurant_id` INT(11) NOT NULL,
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `deleted` INT(1) NOT NULL,
   INDEX `fk_user_has_restaurant_restaurant1_idx` (`restaurant_id` ASC) VISIBLE,
   INDEX `fk_user_has_restaurant_user1_idx` (`user_id` ASC) VISIBLE,
   PRIMARY KEY (`id`),

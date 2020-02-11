@@ -58,7 +58,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(BadCredentialsException.class)
-	protected ResponseEntity<Object> handleBadCredentials(EntityNotFoundException ex) {
+	protected ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex) {
 		CustomErrorResponse customErrorResponse = new CustomErrorResponse(HttpStatus.UNAUTHORIZED);
 		customErrorResponse.setMessage(ex.getMessage());
 		
@@ -66,7 +66,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler({IOException.class, MessagingException.class})
-	protected ResponseEntity<Object> handleImagesUpload(EntityNotFoundException ex) {
+	protected ResponseEntity<Object> handleImagesUpload(Exception ex) {
 		CustomErrorResponse customErrorResponse = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR);
 		customErrorResponse.setMessage(ex.getMessage());
 		
@@ -75,7 +75,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	
 	@ExceptionHandler(BadAttributeValueExpException.class)
-	protected ResponseEntity<Object> handleBadArgumentsException(EntityNotFoundException ex) {
+	protected ResponseEntity<Object> handleBadArgumentsException(BadAttributeValueExpException ex) {
 		CustomErrorResponse customErrorResponse = new CustomErrorResponse(HttpStatus.BAD_REQUEST);
 		customErrorResponse.setMessage(ex.getMessage());
 		

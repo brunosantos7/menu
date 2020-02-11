@@ -1,7 +1,5 @@
 package br.com.menu.menudigital.product;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,19 +10,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-public class Product implements Serializable {
+import br.com.menu.menudigital.interfaces.SoftDeleteClass;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5440267256958735958L;
-	
+@Entity
+public class Product implements SoftDeleteClass {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String description;
+	private Double price;
+
+	@JsonIgnore
+	private boolean deleted;
 	
 	@Column(name="category_id")
 	private Long categoryId;
@@ -70,6 +69,20 @@ public class Product implements Serializable {
 	public void setRestaurantId(Long restaurantId) {
 		this.restaurantId = restaurantId;
 	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	@Override
+	public boolean isDeleted() {
+		return this.deleted;
+	}
+	
 	public String getImageUri() {
 		if(this.imagePath != null) {
 			return ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -80,4 +93,5 @@ public class Product implements Serializable {
 		return null;
 		
 	}
+	
 }

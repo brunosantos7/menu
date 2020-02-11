@@ -2,6 +2,7 @@ package br.com.menu.menudigital.user;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.management.BadAttributeValueExpException;
 import javax.persistence.EntityNotFoundException;
@@ -62,6 +63,6 @@ public class UserController {
 	@GetMapping("/{id}/restaurants")
 	public @ResponseBody List<Restaurant> findRestaurantsByUserId(@PathVariable Long id) {
 		User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe usuario com este id."));
-		return user.getRestaurants();
+		return user.getRestaurants().stream().filter(restaurant -> !restaurant.isDeleted()).collect(Collectors.toList());
 	}
 }

@@ -6,15 +6,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.menu.menudigital.interfaces.SoftDeleteClass;
+
 @Entity
 @Table(name="menu")
-public class Menu {
+public class Menu implements SoftDeleteClass {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String title;
 	private Long restaurantId;
+	
+	@JsonIgnore
+	private boolean deleted;
 	
 	public Long getId() {
 		return id;
@@ -33,5 +40,12 @@ public class Menu {
 	}
 	public void setRestaurantId(Long restaurantId) {
 		this.restaurantId = restaurantId;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	@Override
+	public boolean isDeleted() {
+		return this.deleted;
 	}
 }

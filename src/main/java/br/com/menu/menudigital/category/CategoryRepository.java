@@ -9,6 +9,8 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
 
 	List<Category> findByMenuId(Long id);
 
+	List<Category> findByRestaurantId(Long id);
+	
     @Query("SELECT c FROM Category c FETCH ALL PROPERTIES WHERE c.restaurantId = :restaurantId")
 	List<Category> findByRestaurantIdWithProducts(Long restaurantId);
 

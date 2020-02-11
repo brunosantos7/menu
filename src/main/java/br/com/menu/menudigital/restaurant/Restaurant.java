@@ -9,8 +9,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.menu.menudigital.interfaces.SoftDeleteClass;
+
 @Entity
-public class Restaurant {
+public class Restaurant implements SoftDeleteClass {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -24,6 +26,9 @@ public class Restaurant {
 	private Integer number;
 	private String phone;
 	private String email;
+	
+	@JsonIgnore
+	private boolean deleted;
 	
 	@JsonIgnore
 	private String imagePath;
@@ -93,6 +98,13 @@ public class Restaurant {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	@Override
+	public boolean isDeleted() {
+		return this.deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	public String getUri() {
 		if(this.imagePath != null) {
