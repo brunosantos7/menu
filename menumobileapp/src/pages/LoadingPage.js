@@ -14,13 +14,13 @@ const LoadingPage = ({ navigation }) => {
 
     async function init() {
         try {
+            const cities = await RestaurantService.getCitiesWithStates();
+            await AsyncStorage.setItem('citiesList', JSON.stringify(cities));
             const city = await AsyncStorage.getItem('city');
 
             if (city !== null) {
                 navigation.navigate('App');
             } else {
-                const cities = await RestaurantService.getCitiesWithStates();
-                await AsyncStorage.setItem('citiesList', JSON.stringify(cities));
                 navigation.navigate('CityList');
             }
         } catch(e) {

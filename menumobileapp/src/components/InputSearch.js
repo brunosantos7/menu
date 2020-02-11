@@ -31,6 +31,9 @@ const InputSearch = ({ value, placeholder, onChange, onSubmit }) => {
                 onSubmitEditing={onSubmitEditing}
                 value={value}
                 placeholder={placeholder}
+                autoCompleteType={'off'}
+                autoCapitalize={'none'}
+                autoCorrect={false}
             />
         </View>
     );
