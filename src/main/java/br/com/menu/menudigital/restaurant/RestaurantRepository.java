@@ -13,4 +13,6 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 	List<CityToStateAvailableDTO> findAllCitiesAndSateAvailable();
 
 	List<Restaurant> findByCity(String city);
+
+	List<Restaurant> findByCityOrName(String city, String name);
 }

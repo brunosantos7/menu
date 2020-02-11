@@ -60,112 +60,119 @@ public class RestaurantController {
 	}
 
 	@GetMapping
-	public @ResponseBody List<Restaurant> getAllRestaurants(@RequestParam String city) {
-		return restaurantRepository.findByCity(city);
+	public @ResponseBody List<Restaurant> getAllRestaurants(@RequestParam(name="city", required=false) String city, @RequestParam(name="name", required=false) String name) {
+		return restaurantRepository.findByCityOrName(city, name);
 	}
-	
+
 	@GetMapping("/citiesAndStatesAvailable")
 	public @ResponseBody Map<String, List<CityToStateAvailableDTO>> getAllCitiesAvailableByState() {
 		List<CityToStateAvailableDTO> stateToCities = restaurantRepository.findAllCitiesAndSateAvailable();
-		
+
 		return stateToCities.stream().collect(Collectors.groupingBy(CityToStateAvailableDTO::getState));
-		
+
 	}
-	
+
 	@GetMapping("/{id}")
 	public @ResponseBody Restaurant getRestaurantById(@PathVariable Long id) {
-		return restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
+		return restaurantRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
 	}
-	
+
 	@GetMapping("/{id}/menus")
 	public @ResponseBody List<Menu> getRestaurantMenus(@PathVariable Long id) {
 		return menuRepository.findByRestaurantId(id);
 	}
-	
+
 	@GetMapping("/{id}/products")
 	public @ResponseBody List<Category> getRestaurantProducts(@PathVariable Long id) {
 		return categoryRepository.findByRestaurantIdWithProducts(id);
 	}
-	
+
 	@PostMapping
-	public @ResponseBody Restaurant save(@Valid RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) throws IOException  {
+	public @ResponseBody Restaurant save(@Valid RestaurantDTO newRestaurantDTO,
+			@RequestParam(name = "file", required = false) MultipartFile file, Principal principal) throws IOException {
 		User user = userRepository.findByEmail(principal.getName());
-		
+
 		Restaurant newRes = restaurantRepository.save(newRestaurantDTO.toRestaurantEntity());
-		
+
 		UserHasRestaurant relationship = new UserHasRestaurant();
 		relationship.setUserId(user.getId());
 		relationship.setRestaurantId(newRes.getId());
-		
+
 		userHasRestaurantRepository.save(relationship);
-		
-		if(file != null) {
+
+		if (file != null) {
 			Path path = Paths.get(String.format("images/restaurant/%s", newRes.getId()));
-			
-	        try {
+
+			try {
 				Files.createDirectories(path);
-			
-		        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		        
-		        Files.copy(file.getInputStream(), path.resolve(filename));
-		        newRes.setImagePath(path.resolve(filename).toString());
-		        
-	        } catch (IOException e) {
+
+				String filename = StringUtils.cleanPath(file.getOriginalFilename());
+
+				Files.copy(file.getInputStream(), path.resolve(filename));
+				newRes.setImagePath(path.resolve(filename).toString());
+
+			} catch (IOException e) {
 				throw new IOException("Erro ao salvar imagem no disco.", e);
 			}
-	        
-	        return restaurantRepository.save(newRes);
+
+			return restaurantRepository.save(newRes);
 		}
-		
-        return newRes;
+
+		return newRes;
 	}
-	
+
 	@PutMapping("/{id}")
-	public @ResponseBody Restaurant updateRestaurant(@PathVariable Long id, @Valid RestaurantDTO newRestaurantDTO, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) {
-		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
-		
+	public @ResponseBody Restaurant updateRestaurant(@PathVariable Long id, @Valid RestaurantDTO newRestaurantDTO,
+			@RequestParam(name = "file", required = false) MultipartFile file, Principal principal) {
+		Restaurant restaurant = restaurantRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
+
 		Restaurant restaurantEntity = newRestaurantDTO.toRestaurantEntity();
 		restaurantEntity.setImagePath(restaurant.getImagePath());
 		restaurantEntity.setId(restaurant.getId());
-		
+
 		return restaurantRepository.save(restaurantEntity);
 	}
-	
+
 	@PutMapping("/{id}/image")
-	public @ResponseBody Restaurant updateRestaurantImage(@PathVariable Long id, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) throws IOException {
-		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
-		
+	public @ResponseBody Restaurant updateRestaurantImage(@PathVariable Long id,
+			@RequestParam(name = "file", required = false) MultipartFile file, Principal principal) throws IOException {
+		Restaurant restaurant = restaurantRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
+
 		Path path = Paths.get(String.format("images/restaurant/%s", restaurant.getId()));
-		
-		if(file != null) {
-			
-			if(path.toFile().exists()) {
-		        FileSystemUtils.deleteRecursively(path.toFile());
+
+		if (file != null) {
+
+			if (path.toFile().exists()) {
+				FileSystemUtils.deleteRecursively(path.toFile());
 			}
-			
-	        try {
+
+			try {
 				Files.createDirectories(path);
-			
-		        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		        
-		        Files.copy(file.getInputStream(), path.resolve(filename));
-		        restaurant.setImagePath(path.resolve(filename).toString());
-	        
-	        } catch (IOException e) {
+
+				String filename = StringUtils.cleanPath(file.getOriginalFilename());
+
+				Files.copy(file.getInputStream(), path.resolve(filename));
+				restaurant.setImagePath(path.resolve(filename).toString());
+
+			} catch (IOException e) {
 				throw new IOException("Erro ao salvar imagem no disco.", e);
 			}
 
 		} else {
-	        FileSystemUtils.deleteRecursively(path.toFile());
-	        restaurant.setImagePath(null);
+			FileSystemUtils.deleteRecursively(path.toFile());
+			restaurant.setImagePath(null);
 		}
-		
+
 		return restaurantRepository.save(restaurant);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteRestaurant(@PathVariable("id") Long restaurantId) throws NotFoundException {
-		Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
+		Restaurant restaurant = restaurantRepository.findById(restaurantId)
+				.orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
 		restaurantService.softDeleteRestaurant(restaurant);
 	}
 }
