@@ -61,7 +61,17 @@ public class RestaurantController {
 
 	@GetMapping
 	public @ResponseBody List<Restaurant> getAllRestaurants(@RequestParam(name="city", required=false) String city, @RequestParam(name="name", required=false) String name) {
-		return restaurantRepository.findByCityOrName(city, name);
+		if(city != null && name != null) {
+			String cityLike = "%" + city + "%";
+			String nameLike = "%" + name + "%";
+
+			return restaurantRepository.findByCityAndNameLike(cityLike, nameLike);
+			
+		} else if (city != null) {
+			return restaurantRepository.findByCityIgnoreCaseContaining(city);
+		} else {
+			return restaurantRepository.findByNameIgnoreCaseContaining(name);
+		}
 	}
 
 	@GetMapping("/citiesAndStatesAvailable")

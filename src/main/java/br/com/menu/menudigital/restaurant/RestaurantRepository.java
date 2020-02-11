@@ -14,5 +14,11 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
 	List<Restaurant> findByCity(String city);
 
-	List<Restaurant> findByCityOrName(String city, String name);
+
+	@Query("SELECT r from Restaurant r WHERE r.city LIKE :cityLike AND r.name LIKE :nameLike")
+	List<Restaurant> findByCityAndNameLike(String cityLike, String nameLike);
+
+	List<Restaurant> findByCityIgnoreCaseContaining(String city);
+
+	List<Restaurant> findByNameIgnoreCaseContaining(String name);
 }
