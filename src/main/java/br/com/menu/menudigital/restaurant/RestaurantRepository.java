@@ -11,4 +11,6 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
 	@Query("SELECT new br.com.menu.menudigital.restaurant.CityToStateAvailableDTO(r.city, r.state) from Restaurant r GROUP BY r.city, r.state")
 	List<CityToStateAvailableDTO> findAllCitiesAndSateAvailable();
+
+	List<Restaurant> findByCity(String city);
 }

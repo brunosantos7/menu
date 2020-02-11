@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileSystemUtils;
@@ -59,8 +60,8 @@ public class RestaurantController {
 	}
 
 	@GetMapping
-	public @ResponseBody Iterable<Restaurant> getAllRestaurants() {
-		return restaurantRepository.findAll();
+	public @ResponseBody List<Restaurant> getAllRestaurants(@RequestParam String city) {
+		return restaurantRepository.findByCity(city);
 	}
 	
 	@GetMapping("/citiesAndStatesAvailable")
