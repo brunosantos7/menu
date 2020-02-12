@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
@@ -168,6 +169,24 @@ public class RestaurantController {
 		}
 		return ResponseEntity.ok("Email enviado com sucesso!");
 		
+	}
+	
+	@PostMapping("/{id}/approve")
+	public @ResponseBody ResponseEntity<String> approve(@PathVariable Long id) throws MessagingException {
+		RestaurantApprovalRequest request = restaurantApprovalRequest.findByRestaurantId(id);
+		
+		if(request == null) {
+			throw new EntityNotFoundException("Nao existe nenhuma solicitacao com este id.");
+		}
+
+		Restaurant restaurant = restaurantRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
+		
+		restaurantApprovalRequest.delete(request);
+		restaurant.setApproved(true);
+		restaurantRepository.save(restaurant);
+		
+		return ResponseEntity.ok("Restaurante aprovado!");
 	}
 
 	@PutMapping("/{id}")
