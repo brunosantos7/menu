@@ -8,4 +8,6 @@ public interface UserHasRestaurantRepository extends CrudRepository<UserHasResta
 
 	List<UserHasRestaurant> findByRestaurantId(Long id);
 
+	int countByUserId(Long id);
+
 }

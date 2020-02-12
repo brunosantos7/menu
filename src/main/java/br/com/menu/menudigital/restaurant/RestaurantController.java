@@ -7,10 +7,10 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
+import javax.management.BadAttributeValueExpException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
@@ -37,9 +37,9 @@ import br.com.menu.menudigital.restaurantapprovalrequest.RestaurantApprovalReque
 import br.com.menu.menudigital.restaurantapprovalrequest.RestaurantApprovalRequestRepository;
 import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.user.UserRepository;
-import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurant;
-import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurantRepository;
+import br.com.menu.menudigital.user.UserService;
 import br.com.menu.menudigital.utils.EmailSender;
+import br.com.menu.menudigital.utils.PaymentRequiredException;
 import javassist.NotFoundException;
 
 @Controller
@@ -48,32 +48,38 @@ public class RestaurantController {
 
 	private RestaurantRepository restaurantRepository;
 	private UserRepository userRepository;
-	private UserHasRestaurantRepository userHasRestaurantRepository;
 	private MenuRepository menuRepository;
 	private CategoryRepository categoryRepository;
 	private RestaurantService restaurantService;
 	private EmailSender emailSender;
 	private RestaurantApprovalRequestRepository restaurantApprovalRequest;
+	private UserService userService;
 
     @Value("${support.emails}")
     private String[] supportEmails;
 
 	public RestaurantController(RestaurantRepository restaurantRepository, UserRepository userRepository,
-			UserHasRestaurantRepository userHasRestaurantRepository, MenuRepository menuRepository,
-			CategoryRepository categoryRepository, RestaurantService restaurantService, EmailSender emailSender, RestaurantApprovalRequestRepository restaurantApprovalRequestRepository) {
+			MenuRepository menuRepository, CategoryRepository categoryRepository, RestaurantService restaurantService,
+			EmailSender emailSender, RestaurantApprovalRequestRepository restaurantApprovalRequest,
+			UserService userService, String[] supportEmails) {
 		super();
 		this.restaurantRepository = restaurantRepository;
 		this.userRepository = userRepository;
-		this.userHasRestaurantRepository = userHasRestaurantRepository;
 		this.menuRepository = menuRepository;
 		this.categoryRepository = categoryRepository;
 		this.restaurantService = restaurantService;
 		this.emailSender = emailSender;
-		this.restaurantApprovalRequest = restaurantApprovalRequestRepository;
+		this.restaurantApprovalRequest = restaurantApprovalRequest;
+		this.userService = userService;
+		this.supportEmails = supportEmails;
 	}
 
 	@GetMapping
-	public @ResponseBody List<Restaurant> getAllRestaurants(@RequestParam(name="city", required=false) String city, @RequestParam(name="name", required=false) String name) {
+	public @ResponseBody List<Restaurant> getAllRestaurants(@RequestParam(name="city", required=false) String city, @RequestParam(name="name", required=false) String name) throws BadAttributeValueExpException {
+		if(city == null && name == null) {
+			throw new BadAttributeValueExpException("Voce precisa especificar ao menos um filtro");
+		}
+		
 		if(city != null && name != null) {
 			String cityLike = "%" + city + "%";
 			String nameLike = "%" + name + "%";
@@ -113,37 +119,18 @@ public class RestaurantController {
 
 	@PostMapping
 	public @ResponseBody Restaurant save(@Valid RestaurantDTO newRestaurantDTO,
-			@RequestParam(name = "file", required = false) MultipartFile file, Principal principal) throws IOException {
+			@RequestParam(name = "file", required = false) MultipartFile file, Principal principal) throws IOException, PaymentRequiredException {
+		
 		User user = userRepository.findByEmail(principal.getName());
-
-		Restaurant newRes = restaurantRepository.save(newRestaurantDTO.toRestaurantEntity());
-
-		UserHasRestaurant relationship = new UserHasRestaurant();
-		relationship.setUserId(user.getId());
-		relationship.setRestaurantId(newRes.getId());
-
-		userHasRestaurantRepository.save(relationship);
-
-		if (file != null) {
-			Path path = Paths.get(String.format("images/restaurant/%s", newRes.getId()));
-
-			try {
-				Files.createDirectories(path);
-
-				String filename = StringUtils.cleanPath(file.getOriginalFilename());
-
-				Files.copy(file.getInputStream(), path.resolve(filename));
-				newRes.setImagePath(path.resolve(filename).toString());
-
-			} catch (IOException e) {
-				throw new IOException("Erro ao salvar imagem no disco.", e);
-			}
-
-			return restaurantRepository.save(newRes);
+		
+		boolean isMax = userService.hasMaxRestaurantsForPlan(user);
+		
+		if(isMax) {
+			throw new PaymentRequiredException("Atingiu o limite maximo de restaurantes para este plano.");
 		}
-
-		return newRes;
+		return restaurantService.saveRestaurant(newRestaurantDTO, file, user);
 	}
+
 	
 	@GetMapping("/{id}/approvalRequest")
 	public @ResponseBody RestaurantApprovalRequest getApprovalRequest(@PathVariable Long id) {

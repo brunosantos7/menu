@@ -18,6 +18,7 @@ public class EmailSender {
 
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		helper.setFrom("contact@eatupapp.com");
 		helper.setTo(to);
 
 		helper.setSubject(subject);
@@ -31,6 +32,7 @@ public class EmailSender {
 
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+		helper.setFrom("contact@eatupapp.com");
 		helper.setTo(to);
 
 		helper.setSubject(subject);

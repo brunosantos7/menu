@@ -82,4 +82,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(customErrorResponse, customErrorResponse.getStatus());
 	}
 	
+	
+	@ExceptionHandler(PaymentRequiredException.class)
+	protected ResponseEntity<Object> handlePaymentRequiredException(PaymentRequiredException ex) {
+		CustomErrorResponse customErrorResponse = new CustomErrorResponse(HttpStatus.PAYMENT_REQUIRED);
+		customErrorResponse.setMessage(ex.getMessage());
+		
+		return new ResponseEntity<>(customErrorResponse, customErrorResponse.getStatus());
+	}
+	
 }
