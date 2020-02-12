@@ -26,6 +26,7 @@ public class Restaurant implements SoftDeleteClass {
 	private Integer number;
 	private String phone;
 	private String email;
+	private boolean approved;
 	
 	@JsonIgnore
 	private boolean deleted;
@@ -105,6 +106,12 @@ public class Restaurant implements SoftDeleteClass {
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	public boolean isApproved() {
+		return approved;
+	}
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 	public String getUri() {
 		if(this.imagePath != null) {

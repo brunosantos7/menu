@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -30,10 +32,13 @@ import br.com.menu.menudigital.category.Category;
 import br.com.menu.menudigital.category.CategoryRepository;
 import br.com.menu.menudigital.menu.Menu;
 import br.com.menu.menudigital.menu.MenuRepository;
+import br.com.menu.menudigital.restaurantapprovementrequest.RestaurantAppovementRequest;
+import br.com.menu.menudigital.restaurantapprovementrequest.RestaurantAppovementRequestRepository;
 import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.user.UserRepository;
 import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurant;
 import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurantRepository;
+import br.com.menu.menudigital.utils.EmailSender;
 import javassist.NotFoundException;
 
 @Controller
@@ -46,10 +51,15 @@ public class RestaurantController {
 	private MenuRepository menuRepository;
 	private CategoryRepository categoryRepository;
 	private RestaurantService restaurantService;
+	private EmailSender emailSender;
+	private RestaurantAppovementRequestRepository restaurantAppovementRequestRepository;
+
+    @Value("${support.emails}")
+    private String[] supportEmails;
 
 	public RestaurantController(RestaurantRepository restaurantRepository, UserRepository userRepository,
 			UserHasRestaurantRepository userHasRestaurantRepository, MenuRepository menuRepository,
-			CategoryRepository categoryRepository, RestaurantService restaurantService) {
+			CategoryRepository categoryRepository, RestaurantService restaurantService, EmailSender emailSender, RestaurantAppovementRequestRepository restaurantAppovementRequestRepository) {
 		super();
 		this.restaurantRepository = restaurantRepository;
 		this.userRepository = userRepository;
@@ -57,6 +67,8 @@ public class RestaurantController {
 		this.menuRepository = menuRepository;
 		this.categoryRepository = categoryRepository;
 		this.restaurantService = restaurantService;
+		this.emailSender = emailSender;
+		this.restaurantAppovementRequestRepository = restaurantAppovementRequestRepository;
 	}
 
 	@GetMapping
@@ -130,6 +142,32 @@ public class RestaurantController {
 		}
 
 		return newRes;
+	}
+	
+	@GetMapping("/{id}/approvementRequest")
+	public @ResponseBody RestaurantAppovementRequest getApprovementRequest(@RequestParam Long id) throws MessagingException {
+		return restaurantAppovementRequestRepository.findByRestaurantId(id);
+		
+	}
+	
+	@PostMapping("/{id}/approvementRequest")
+	public @ResponseBody ResponseEntity<String> approvementRequest(@RequestParam Long id) throws MessagingException {
+		RestaurantAppovementRequest request = restaurantAppovementRequestRepository.findByRestaurantId(id);
+		
+		if(request != null) {
+			return ResponseEntity.ok("Solicitacao ja foi enviada e esta em analise. Aguarde!");
+		}
+		
+		restaurantAppovementRequestRepository.save(new RestaurantAppovementRequest(id));
+		StringBuilder emailBody = new StringBuilder("Solicitacao de aprovacao para o restaurante de id: " + id);
+		
+		try {
+			emailSender.sendEmail(supportEmails, "Recupecacao de senha", emailBody.toString());
+		} catch (MessagingException e) {
+			throw new MessagingException("Erro ao enviar o email");
+		}
+		return ResponseEntity.ok("Email enviado com sucesso!");
+		
 	}
 
 	@PutMapping("/{id}")

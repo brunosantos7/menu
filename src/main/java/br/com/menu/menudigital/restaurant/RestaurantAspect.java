@@ -60,4 +60,17 @@ public class RestaurantAspect {
 		}
 	}
 	
+	@Before("execution (* br.com.menu.menudigital.restaurant.RestaurantController.approvementRequest(..))")
+	public void approvementRequest(JoinPoint joinPoint) throws UnauthorizedModifyingException {
+		Object[] args = joinPoint.getArgs();
+		
+		Long restaurantId = (Long)args[0];
+		
+		User user = tokenUtils.getUserOnJwsToken();
+		
+		if(!user.getRestaurants().stream().map(Restaurant::getId).collect(Collectors.toList()).contains(restaurantId)){
+			throw new UnauthorizedModifyingException();
+		}
+	}
+	
 }
