@@ -60,8 +60,8 @@ public class RestaurantAspect {
 		}
 	}
 	
-	@Before("execution (* br.com.menu.menudigital.restaurant.RestaurantController.approvementRequest(..))")
-	public void approvementRequest(JoinPoint joinPoint) throws UnauthorizedModifyingException {
+	@Before("execution (* br.com.menu.menudigital.restaurant.RestaurantController.approvalRequest(..))")
+	public void approvalRequest(JoinPoint joinPoint) throws UnauthorizedModifyingException {
 		Object[] args = joinPoint.getArgs();
 		
 		Long restaurantId = (Long)args[0];

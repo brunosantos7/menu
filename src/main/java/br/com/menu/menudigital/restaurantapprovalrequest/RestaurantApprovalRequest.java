@@ -1,4 +1,4 @@
-package br.com.menu.menudigital.restaurantapprovementrequest;
+package br.com.menu.menudigital.restaurantapprovalrequest;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,14 +6,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class RestaurantAppovementRequest {
+public class RestaurantApprovalRequest {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private Long restaurantId;
 	
-	public RestaurantAppovementRequest(Long restaurantId) {
+	public RestaurantApprovalRequest() {
+		super();
+	}
+	public RestaurantApprovalRequest(Long restaurantId) {
 		super();
 		this.restaurantId = restaurantId;
 	}

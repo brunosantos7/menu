@@ -32,8 +32,8 @@ import br.com.menu.menudigital.category.Category;
 import br.com.menu.menudigital.category.CategoryRepository;
 import br.com.menu.menudigital.menu.Menu;
 import br.com.menu.menudigital.menu.MenuRepository;
-import br.com.menu.menudigital.restaurantapprovementrequest.RestaurantAppovementRequest;
-import br.com.menu.menudigital.restaurantapprovementrequest.RestaurantAppovementRequestRepository;
+import br.com.menu.menudigital.restaurantapprovalrequest.RestaurantApprovalRequest;
+import br.com.menu.menudigital.restaurantapprovalrequest.RestaurantApprovalRequestRepository;
 import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.user.UserRepository;
 import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurant;
@@ -52,14 +52,14 @@ public class RestaurantController {
 	private CategoryRepository categoryRepository;
 	private RestaurantService restaurantService;
 	private EmailSender emailSender;
-	private RestaurantAppovementRequestRepository restaurantAppovementRequestRepository;
+	private RestaurantApprovalRequestRepository restaurantApprovalRequest;
 
     @Value("${support.emails}")
     private String[] supportEmails;
 
 	public RestaurantController(RestaurantRepository restaurantRepository, UserRepository userRepository,
 			UserHasRestaurantRepository userHasRestaurantRepository, MenuRepository menuRepository,
-			CategoryRepository categoryRepository, RestaurantService restaurantService, EmailSender emailSender, RestaurantAppovementRequestRepository restaurantAppovementRequestRepository) {
+			CategoryRepository categoryRepository, RestaurantService restaurantService, EmailSender emailSender, RestaurantApprovalRequestRepository restaurantApprovalRequestRepository) {
 		super();
 		this.restaurantRepository = restaurantRepository;
 		this.userRepository = userRepository;
@@ -68,7 +68,7 @@ public class RestaurantController {
 		this.categoryRepository = categoryRepository;
 		this.restaurantService = restaurantService;
 		this.emailSender = emailSender;
-		this.restaurantAppovementRequestRepository = restaurantAppovementRequestRepository;
+		this.restaurantApprovalRequest = restaurantApprovalRequestRepository;
 	}
 
 	@GetMapping
@@ -144,25 +144,25 @@ public class RestaurantController {
 		return newRes;
 	}
 	
-	@GetMapping("/{id}/approvementRequest")
-	public @ResponseBody RestaurantAppovementRequest getApprovementRequest(@RequestParam Long id) throws MessagingException {
-		return restaurantAppovementRequestRepository.findByRestaurantId(id);
+	@GetMapping("/{id}/approvalRequest")
+	public @ResponseBody RestaurantApprovalRequest getApprovalRequest(@PathVariable Long id) {
+		return restaurantApprovalRequest.findByRestaurantId(id);
 		
 	}
 	
-	@PostMapping("/{id}/approvementRequest")
-	public @ResponseBody ResponseEntity<String> approvementRequest(@RequestParam Long id) throws MessagingException {
-		RestaurantAppovementRequest request = restaurantAppovementRequestRepository.findByRestaurantId(id);
+	@PostMapping("/{id}/approvalRequest")
+	public @ResponseBody ResponseEntity<String> approvalRequest(@PathVariable Long id) throws MessagingException {
+		RestaurantApprovalRequest request = restaurantApprovalRequest.findByRestaurantId(id);
 		
 		if(request != null) {
 			return ResponseEntity.ok("Solicitacao ja foi enviada e esta em analise. Aguarde!");
 		}
 		
-		restaurantAppovementRequestRepository.save(new RestaurantAppovementRequest(id));
+		restaurantApprovalRequest.save(new RestaurantApprovalRequest(id));
 		StringBuilder emailBody = new StringBuilder("Solicitacao de aprovacao para o restaurante de id: " + id);
 		
 		try {
-			emailSender.sendEmail(supportEmails, "Recupecacao de senha", emailBody.toString());
+			emailSender.sendEmail(supportEmails, "EatUp - Aprovacao de restaurante", emailBody.toString());
 		} catch (MessagingException e) {
 			throw new MessagingException("Erro ao enviar o email");
 		}
