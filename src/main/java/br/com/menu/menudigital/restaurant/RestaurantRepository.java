@@ -9,7 +9,7 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
 	List<Restaurant> findAll();
 
-	@Query("SELECT new br.com.menu.menudigital.restaurant.CityToStateAvailableDTO(r.city, r.state) from Restaurant r GROUP BY r.city, r.state")
+	@Query("SELECT new br.com.menu.menudigital.restaurant.CityToStateAvailableDTO(r.city, r.state) from Restaurant r WHERE r.approved = 1 GROUP BY r.city, r.state")
 	List<CityToStateAvailableDTO> findAllCitiesAndSateAvailable();
 
 	List<Restaurant> findByCity(String city);
