@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,17 +23,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.menu.menudigital.user.User;
+import br.com.menu.menudigital.user.UserRepository;
+import br.com.menu.menudigital.user.UserService;
+import br.com.menu.menudigital.utils.PaymentRequiredException;
+
 @Controller
 @RequestMapping("/product")
 public class ProductController {
 	
 	private ProductRepository productRepository;
 	private ProductService productService;
+	private UserRepository userRepository;
+	private UserService userService;
 	
-	public ProductController(ProductRepository productRepository, ProductService productService) {
+	public ProductController(ProductRepository productRepository, ProductService productService,
+			UserRepository userRepository, UserService userService) {
 		super();
 		this.productRepository = productRepository;
 		this.productService = productService;
+		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	@GetMapping("/{id}")
@@ -41,27 +52,18 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public @ResponseBody Product save(@Valid ProductDTO productDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
-		Product product = productRepository.save(productDTO.toEntity());
+	public @ResponseBody Product save(@Valid ProductDTO productDTO, @RequestParam(name="file", required=false) MultipartFile file, Principal principal) throws PaymentRequiredException, IOException {
+		User user = userRepository.findByEmail(principal.getName());
 		
-		if(file != null) {
-			Path path = Paths.get(String.format("images/product/%s", product.getId())); 
-			
-	        try {
-				Files.createDirectories(path);
-	        
-		        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		        
-		        Files.copy(file.getInputStream(), path.resolve(filename));
-		        product.setImagePath(path.resolve(filename).toString());
-	        } catch (IOException e) {
-				throw new IOException("Aconteceu algum problema ao salvar a imagem no disco.", e);
-			}
-	        return productRepository.save(product);
+		boolean isMax = userService.hasMaxProductForPlan(user);
+		
+		if(isMax) {
+			throw new PaymentRequiredException("Atingiu o limite maximo de produtos para este plano.");
 		}
-		return product;
+		
+		return productService.saveProduct(productDTO, file);
 	}
-	
+
 	@PutMapping("/{id}")
 	public @ResponseBody Product update (@PathVariable Long id, @Valid ProductDTO productDTO, @RequestParam(name="file", required=false) MultipartFile file) {
 		Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe produto com este id."));
