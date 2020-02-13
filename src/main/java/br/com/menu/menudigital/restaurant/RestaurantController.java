@@ -84,12 +84,12 @@ public class RestaurantController {
 			String cityLike = "%" + city + "%";
 			String nameLike = "%" + name + "%";
 
-			return restaurantRepository.findByCityAndNameLike(cityLike, nameLike);
+			return restaurantRepository.findByApprovedAndCityAndNameLike(true, cityLike, nameLike);
 			
 		} else if (city != null) {
-			return restaurantRepository.findByCityIgnoreCaseContaining(city);
+			return restaurantRepository.findByApprovedAndCityIgnoreCaseContaining(true, city);
 		} else {
-			return restaurantRepository.findByNameIgnoreCaseContaining(name);
+			return restaurantRepository.findByApprovedAndNameIgnoreCaseContaining(true, name);
 		}
 	}
 

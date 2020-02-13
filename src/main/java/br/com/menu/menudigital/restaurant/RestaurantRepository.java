@@ -15,10 +15,10 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 	List<Restaurant> findByCity(String city);
 
 
-	@Query("SELECT r from Restaurant r WHERE r.city LIKE :cityLike AND r.name LIKE :nameLike")
-	List<Restaurant> findByCityAndNameLike(String cityLike, String nameLike);
+	List<Restaurant> findByApprovedAndCityIgnoreCaseContaining(boolean approved, String city);
 
-	List<Restaurant> findByCityIgnoreCaseContaining(String city);
+	List<Restaurant> findByApprovedAndNameIgnoreCaseContaining(boolean approved, String name);
 
-	List<Restaurant> findByNameIgnoreCaseContaining(String name);
+	@Query("SELECT r from Restaurant r WHERE r.approved = :approved AND r.city LIKE :cityLike AND r.name LIKE :nameLike")
+	List<Restaurant> findByApprovedAndCityAndNameLike(boolean approved, String cityLike, String nameLike);
 }
