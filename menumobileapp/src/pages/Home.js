@@ -6,6 +6,7 @@ import {
     SafeAreaView,
     View,
     TouchableOpacity,
+    Dimensions
 } from 'react-native';
 import RestaurantTile from '../components/RestaurantTile';
 import RestaurantCard from '../components/RestaurantCard';
@@ -14,6 +15,8 @@ import MnText from '../components/MnText';
 import RestaurantService from '../services/RestaurantService';
 import { colors } from '../constants';
 import InputSearch from '../components/InputSearch';
+
+const {height, width} = Dimensions.get('window');
 
 const Home = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
@@ -67,6 +70,7 @@ const Home = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
+                style={{height: height - 20}}
                 data={restaurants}
                 renderItem={({ item }) => (
                     <RestaurantCard1

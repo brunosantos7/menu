@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -34,6 +34,7 @@ const InputSearch = ({ value, placeholder, onChange, onSubmit }) => {
                 autoCompleteType={'off'}
                 autoCapitalize={'none'}
                 autoCorrect={false}
+                returnKeyType={'done'}
             />
         </View>
     );
