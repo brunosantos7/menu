@@ -1,4 +1,4 @@
-package br.com.menu.menudigital.utils;
+package br.com.menu.menudigital.utils.exception;
 
 public class UnauthorizedModifyingException extends Exception {
 

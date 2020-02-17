@@ -1,4 +1,4 @@
-package br.com.menu.menudigital.utils;
+package br.com.menu.menudigital.utils.exception;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import br.com.menu.menudigital.utils.CustomErrorResponse;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -90,5 +92,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return new ResponseEntity<>(customErrorResponse, customErrorResponse.getStatus());
 	}
+	
+	
+	@ExceptionHandler(ResourceAlreadyExistsException.class)
+	protected ResponseEntity<Object> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+		CustomErrorResponse customErrorResponse = new CustomErrorResponse(HttpStatus.CONFLICT);
+		customErrorResponse.setMessage(ex.getMessage());
+		
+		return new ResponseEntity<>(customErrorResponse, customErrorResponse.getStatus());
+	}
+	
+	
+	
 	
 }

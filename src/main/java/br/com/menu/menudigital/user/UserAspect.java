@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.menu.menudigital.utils.TokenUtils;
-import br.com.menu.menudigital.utils.UnauthorizedModifyingException;
+import br.com.menu.menudigital.utils.exception.UnauthorizedModifyingException;
 
 @Aspect
 @Configuration

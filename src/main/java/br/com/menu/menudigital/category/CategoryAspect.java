@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import br.com.menu.menudigital.restaurant.Restaurant;
 import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.utils.TokenUtils;
-import br.com.menu.menudigital.utils.UnauthorizedModifyingException;
+import br.com.menu.menudigital.utils.exception.UnauthorizedModifyingException;
 
 @Aspect
 @Configuration

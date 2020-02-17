@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.menu.menudigital.restaurant.Restaurant;
+import br.com.menu.menudigital.utils.exception.ResourceAlreadyExistsException;
 
 @Controller
 @RequestMapping("/user")
@@ -34,18 +35,18 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public @ResponseBody User saveUser(@RequestBody @Valid UserDTO userDto) throws BadAttributeValueExpException {
+	public @ResponseBody User saveUser(@RequestBody @Valid UserDTO userDto) throws ResourceAlreadyExistsException {
 		User user = userRepository.findByEmail(userDto.getEmail());
 		
 		if(user != null) {
-			throw new BadAttributeValueExpException("Ja existe um usuario com este email.");
+			throw new ResourceAlreadyExistsException("Ja existe um usuario com este email.");
 		}
 		
 		if(userDto.getUsername() != null) {
 			user = userRepository.findByUsername(userDto.getUsername());
 			
 			if(user != null) {
-				throw new BadAttributeValueExpException("Ja existe um usuario com este username.");
+				throw new ResourceAlreadyExistsException("Ja existe um usuario com este username.");
 			}
 		}
 		

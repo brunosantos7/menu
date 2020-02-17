@@ -20,7 +20,7 @@ import br.com.menu.menudigital.category.CategoryRepository;
 import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.user.UserRepository;
 import br.com.menu.menudigital.user.UserService;
-import br.com.menu.menudigital.utils.PaymentRequiredException;
+import br.com.menu.menudigital.utils.exception.PaymentRequiredException;
 
 @Controller
 @RequestMapping("/menu")

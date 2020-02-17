@@ -39,7 +39,8 @@ import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.user.UserRepository;
 import br.com.menu.menudigital.user.UserService;
 import br.com.menu.menudigital.utils.EmailSender;
-import br.com.menu.menudigital.utils.PaymentRequiredException;
+import br.com.menu.menudigital.utils.exception.PaymentRequiredException;
+import br.com.menu.menudigital.utils.exception.ResourceAlreadyExistsException;
 import javassist.NotFoundException;
 
 @Controller
@@ -159,11 +160,11 @@ public class RestaurantController {
 	}
 	
 	@PostMapping("/{id}/approve")
-	public @ResponseBody ResponseEntity<String> approve(@PathVariable Long id) throws MessagingException {
+	public @ResponseBody ResponseEntity<String> approve(@PathVariable Long id) throws MessagingException, ResourceAlreadyExistsException {
 		RestaurantApprovalRequest request = restaurantApprovalRequest.findByRestaurantId(id);
 		
 		if(request == null) {
-			throw new EntityNotFoundException("Nao existe nenhuma solicitacao com este id.");
+			throw new ResourceAlreadyExistsException("Nao existe nenhuma solicitacao com este id.");
 		}
 
 		Restaurant restaurant = restaurantRepository.findById(id)
