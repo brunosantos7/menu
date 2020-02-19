@@ -8,4 +8,6 @@ public interface UserService {
 
 	boolean hasMaxProductForPlan(User user);
 
+	boolean hasMaxCategoryForPlan(User user);
+
 }

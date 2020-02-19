@@ -1,9 +1,6 @@
 package br.com.menu.menudigital.restaurant;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +14,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -192,36 +187,11 @@ public class RestaurantController {
 
 	@PutMapping("/{id}/image")
 	public @ResponseBody Restaurant updateRestaurantImage(@PathVariable Long id,
-			@RequestParam(name = "file", required = false) MultipartFile file, Principal principal) throws IOException {
+			@RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
 		Restaurant restaurant = restaurantRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Nao existe restaurante com este id."));
 
-		Path path = Paths.get(String.format("images/restaurant/%s", restaurant.getId()));
-
-		if (file != null) {
-
-			if (path.toFile().exists()) {
-				FileSystemUtils.deleteRecursively(path.toFile());
-			}
-
-			try {
-				Files.createDirectories(path);
-
-				String filename = StringUtils.cleanPath(file.getOriginalFilename());
-
-				Files.copy(file.getInputStream(), path.resolve(filename));
-				restaurant.setImagePath(path.resolve(filename).toString());
-
-			} catch (IOException e) {
-				throw new IOException("Erro ao salvar imagem no disco.", e);
-			}
-
-		} else {
-			FileSystemUtils.deleteRecursively(path.toFile());
-			restaurant.setImagePath(null);
-		}
-
-		return restaurantRepository.save(restaurant);
+		return restaurantService.updateRestaurantImage(file, restaurant);
 	}
 
 	@DeleteMapping("/{id}")

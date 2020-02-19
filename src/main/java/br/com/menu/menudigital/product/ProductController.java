@@ -1,9 +1,6 @@
 package br.com.menu.menudigital.product;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -11,8 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +60,7 @@ public class ProductController {
 	}
 
 	@PutMapping("/{id}")
-	public @ResponseBody Product update (@PathVariable Long id, @Valid ProductDTO productDTO, @RequestParam(name="file", required=false) MultipartFile file) {
+	public @ResponseBody Product update (@PathVariable Long id, @Valid ProductDTO productDTO) {
 		Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe produto com este id."));
 
 		Product entityToSave = productDTO.toEntity();
@@ -76,39 +71,11 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}/image")
-	public @ResponseBody Product updateProductImage (@PathVariable Long id, ProductDTO productDTO, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
+	public @ResponseBody Product updateProductImage (@PathVariable Long id, @RequestParam(name="file", required=false) MultipartFile file) throws IOException {
 		Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe produto com este id."));
-		product.setCategoryId(productDTO.getCategoryId());
-		product.setName(productDTO.getName());
-		product.setDescription(productDTO.getDescription());
 		
-		Path path = Paths.get(String.format("images/product/%s", product.getId())); 
-		
-		if(file != null) {
-			
-			if(path.toFile().exists()) {
-		        FileSystemUtils.deleteRecursively(path.toFile());
-			}
-			
-	        try {
-				Files.createDirectories(path);
-			
-	        
-		        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		        
-		        Files.copy(file.getInputStream(), path.resolve(filename));
-		        product.setImagePath(path.resolve(filename).toString());
-		        
-	        } catch (IOException e) {
-				throw new IOException("Aconteceu algum problema ao salvar a imagem no disco.", e);
-			}
-	        
-		} else {
-	        FileSystemUtils.deleteRecursively(path.toFile());
-	        product.setImagePath(null);
-		}
+		return productService.updateProductImage(file, product);
 
-		return productRepository.save(product);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -116,7 +83,7 @@ public class ProductController {
 		Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nao existe produto com este id."));
 
 //		Path path = Paths.get(String.format("images/product/%s", product.getId())); 
-//        FileSystemUtils.deleteRecursively(path.toFile());
+//      FileSystemUtils.deleteRecursively(path.toFile());
         
 		productService.softDeleteProduct(product);
 	}

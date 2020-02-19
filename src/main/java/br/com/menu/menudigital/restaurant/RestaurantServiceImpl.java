@@ -1,13 +1,9 @@
 package br.com.menu.menudigital.restaurant;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.menu.menudigital.menu.Menu;
@@ -17,6 +13,7 @@ import br.com.menu.menudigital.user.User;
 import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurant;
 import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurantRepository;
 import br.com.menu.menudigital.userhasrestaurant.UserHasRestaurantService;
+import br.com.menu.menudigital.utils.file.FileUtils;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -68,26 +65,34 @@ public class RestaurantServiceImpl implements RestaurantService {
 		relationship.setRestaurantId(newRes.getId());
 
 		userHasRestaurantRepository.save(relationship);
-
+		
 		if (file != null) {
-			Path path = Paths.get(String.format("images/restaurant/%s", newRes.getId()));
 
-			try {
-				Files.createDirectories(path);
-
-				String filename = StringUtils.cleanPath(file.getOriginalFilename());
-
-				Files.copy(file.getInputStream(), path.resolve(filename));
-				newRes.setImagePath(path.resolve(filename).toString());
-
-			} catch (IOException e) {
-				throw new IOException("Erro ao salvar imagem no disco.", e);
-			}
-
+			String filePath = FileUtils.saveOnDisk(file, newRes.getId());
+			
+			newRes.setImagePath(filePath);
 			return restaurantRepository.save(newRes);
 		}
 
 		return newRes;
+	}
+
+	@Override
+	public Restaurant updateRestaurantImage(MultipartFile file, Restaurant restaurant) throws IOException {
+		
+		String newPath = null;
+		
+		if(restaurant.getImagePath() != null) {
+			FileUtils.deleteFromDisk(restaurant.getImagePath());
+		}
+		
+		if(file != null) {
+			newPath = FileUtils.saveOnDisk(file, restaurant.getId());
+		}
+
+		restaurant.setImagePath(newPath);
+		return restaurantRepository.save(restaurant);
+		
 	}
 	
 }

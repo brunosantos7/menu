@@ -54,12 +54,16 @@ public class ProductAspect {
 	@Before("execution (* br.com.menu.menudigital.product.ProductController.updateProductImage(..))")
 	public void updateProductImage(JoinPoint joinPoint) throws UnauthorizedModifyingException  {
 		Object[] args = joinPoint.getArgs();
-		Long restaurantId = ((ProductDTO)args[1]).getRestaurantId();
 		
-		User user = tokenUtils.getUserOnJwsToken();
+		Optional<Product> product = productRepository.findById((Long)args[0]);
 		
-		if(!user.getRestaurants().stream().map(Restaurant::getId).collect(Collectors.toList()).contains(restaurantId)) {
-			throw new UnauthorizedModifyingException();
+		if(product.isPresent()) {
+			Long restaurantId = product.get().getRestaurantId();
+			User user = tokenUtils.getUserOnJwsToken();
+			
+			if(!user.getRestaurants().stream().map(Restaurant::getId).collect(Collectors.toList()).contains(restaurantId)) {
+				throw new UnauthorizedModifyingException();
+			}
 		}
 	}
 

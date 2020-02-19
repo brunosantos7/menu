@@ -12,4 +12,5 @@ public interface ProductService {
 
 	Product saveProduct(@Valid ProductDTO productDTO, MultipartFile file) throws IOException;
 
+	public Product updateProductImage(MultipartFile file, Product product) throws IOException;
 }

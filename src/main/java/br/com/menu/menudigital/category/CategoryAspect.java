@@ -58,14 +58,21 @@ public class CategoryAspect {
 	@Before("execution (* br.com.menu.menudigital.category.CategoryController.updateCategoryImage(..))")
 	public void updateCategoryImage(JoinPoint joinPoint) throws BadAttributeValueExpException {
 		Object[] args = joinPoint.getArgs();
-		Long restaurantId = ((CategoryDTO) args[1]).getRestaurantId();
 
-		User user = tokenUtils.getUserOnJwsToken();
+		Long categoryId = (Long) args[0];
+		Optional<Category> category = categoryRepository.findById(categoryId);
+		
+		if(category.isPresent()) {
+			Long restaurantId = category.get().getRestaurantId();
+			
+			User user = tokenUtils.getUserOnJwsToken();
 
-		if (!user.getRestaurants().stream().map(Restaurant::getId).collect(Collectors.toList())
-				.contains(restaurantId)) {
-			throw new BadAttributeValueExpException("Parece que esse restaurante nao e seu.");
+			if (!user.getRestaurants().stream().map(Restaurant::getId).collect(Collectors.toList())
+					.contains(restaurantId)) {
+				throw new BadAttributeValueExpException("Parece que esse restaurante nao e seu.");
+			}
 		}
+		
 	}
 
 	@Before("execution (* br.com.menu.menudigital.category.CategoryController.delete(..))")

@@ -12,4 +12,6 @@ public interface RestaurantService {
 	
 	public Restaurant saveRestaurant(RestaurantDTO newRestaurantDTO, MultipartFile file, User user) throws IOException;
 
+	Restaurant updateRestaurantImage(MultipartFile file, Restaurant restaurant) throws IOException;
+
 }
