@@ -120,7 +120,9 @@ public class Restaurant implements SoftDeleteClass {
 				    .toUriString();
 		}
 		
-		return null;
-	
+		return ServletUriComponentsBuilder.fromCurrentContextPath()
+			    .path("images/noimage")
+			    .toUriString();
+		
 	}
 }

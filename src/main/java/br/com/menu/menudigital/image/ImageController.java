@@ -1,8 +1,10 @@
 package br.com.menu.menudigital.image;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
@@ -65,6 +67,16 @@ public class ImageController {
 		FileSystemResource fileSystemResource = new FileSystemResource(product.getImagePath());
 	    response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 	    IOUtils.copy(new FileInputStream(fileSystemResource.getFile()), response.getOutputStream());
+	}
+	
+	@GetMapping("/noimage")
+	public void noimage(HttpServletResponse response) throws IOException {
+		
+		InputStream inputStream = getClass()
+				.getClassLoader().getResourceAsStream("noimage.png");
+		
+	    response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+	    IOUtils.copy(inputStream, response.getOutputStream());
 	}
 
 

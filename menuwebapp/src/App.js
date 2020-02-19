@@ -56,7 +56,7 @@ export default function App() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            Meus restaurantes
           </Typography>
           <IconButton color="inherit">
             <ExitToApp />

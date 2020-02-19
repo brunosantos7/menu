@@ -16,7 +16,7 @@ HttpService.interceptors.request.use(
       "Content-Type": "application/x-www-form-urlencoded"
     };
     config.headers.Authorization =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODE0NDQyNjAsImlhdCI6MTU4MTM1Nzg2MCwiZW1haWwiOiJicnVuby5zYW50b3M3QG91dGxvb2suY29tIn0.1WUFQg4cqCp1q2Byqyn44tmFxMYHIoyRixsv6hmIero";
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODIxNTI2ODYsImlhdCI6MTU4MjA2NjI4NiwiZW1haWwiOiJicnVuby5zYW50b3M3QG91dGxvb2suY29tIn0.TXLgAH-pa1fCLKnVNz9LnfhAQp0PYxlV9SFEnYzZhO0";
     setGlobal({ requestLoading: true });
     return config;
   },

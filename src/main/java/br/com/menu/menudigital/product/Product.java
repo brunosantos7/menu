@@ -88,9 +88,11 @@ public class Product implements SoftDeleteClass {
 			return ServletUriComponentsBuilder.fromCurrentContextPath()
 				    .path(String.format("images/product/%s", this.id))
 				    .toUriString();
-		}
+		}	
 		
-		return null;
+		return ServletUriComponentsBuilder.fromCurrentContextPath()
+			    .path("images/noimage")
+			    .toUriString();
 		
 	}
 	

@@ -7,7 +7,7 @@ import Restaurant from "../restaurant/Restaurant";
 import UserService from "../../services/UserService";
 
 export default function Dashboard() {
-  const hardCodedUserId = 2;
+  const hardCodedUserId = 3;
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {

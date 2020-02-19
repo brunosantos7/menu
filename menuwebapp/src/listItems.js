@@ -19,7 +19,7 @@ export const menuListItems = (
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard" />
+        <ListItemText primary="Meus restaurantes" />
       </ListItem>
     </Link>
 

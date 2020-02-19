@@ -93,7 +93,11 @@ public class Category implements SoftDeleteClass {
 			return ServletUriComponentsBuilder.fromCurrentContextPath()
 					.path(String.format("images/category/%s", this.id)).toUriString();
 		}
-		return null;
+
+		return ServletUriComponentsBuilder.fromCurrentContextPath()
+			    .path("images/noimage")
+			    .toUriString();
+		
 	}
 
 	@Override
