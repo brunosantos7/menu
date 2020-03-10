@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
@@ -16,17 +17,20 @@ import RestaurantService from '../../services/RestaurantService';
 
 const useStyles = makeStyles({
   root: {
-    margin: '10px 0px'
+    margin: '20px 0px'
   },
   cardContent: {
     backgroundColor: '#efefef',
     cursor: 'pointer'
+  },
+  cardActions: {
+    height: '50px'
   }
 });
 
 function Menu({ match }) {
   const { restaurantId } = useParams();
-  const [menus, setMenus] = useState([]);
+  const [menus, setMenus] = useState(null);
   const classes = useStyles();
   let history = useHistory();
 
@@ -48,7 +52,7 @@ function Menu({ match }) {
       <br />
       <br />
 
-      {menus.length === 0 && (
+      {menus && menus.length === 0 && (
         <NoRecordsFound
           message="Você não tem nenhum menu cadastrado para esse restaurante ainda."
           buttonTitle="Cadastrar Menu"
@@ -56,8 +60,16 @@ function Menu({ match }) {
         />
       )}
 
-      {menus.length > 0 && (
+      {menus && menus.length > 0 && (
         <Grid container direction="column">
+          <Typography
+            style={{
+              textTransform: 'none'
+            }}
+            variant="h5"
+          >
+            Menu
+          </Typography>
           <Grid item xs={12}>
             {menus.map(menu => (
               <Card key={menu.id} className={classes.root}>
@@ -67,27 +79,22 @@ function Menu({ match }) {
                     history.push(`${match.url}/${menu.id}/category`)
                   }
                 >
-                  <Typography variant="h5" component="h2">
+                  <Typography variant="h6" component="h2">
                     {menu.title}
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    startIcon={<EditIcon />}
-                    onClick={() => handleEdit()}
-                  >
-                    Atualizar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    startIcon={<DeleteIcon />}
-                    onClick={() => handleDelete()}
-                  >
-                    Remover
-                  </Button>
+                <CardActions className={classes.cardActions}>
+                  <Tooltip title="Atualizar menu">
+                    <IconButton onClick={() => handleEdit()}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Remover menu">
+                    <IconButton onClick={() => handleDelete()}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
                 </CardActions>
               </Card>
             ))}
